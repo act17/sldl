@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Alpha 0.0.2 | 2023/04/18
+Alpha 0.0.3 | 2023/04/20 (Haha, weed.)
 
 
 # Description
@@ -20,11 +20,28 @@ Alpha 0.0.2 | 2023/04/18
 
   Currently, the usage of SLDL is as follows:
 
-  1)  Enter the path to your source port of choice.
-  2)  Enter the path to your IWAD of choice.
+  1) Create a file where ``sldl`` is located (The binary, not the repo.) called ``bins.txt`` and ``iwad.txt``.
+  2) Enter name/path information in the two .txt files, example below.
+  3) Run ``sldl`` and select your Source Port/IWAD.
+
+  *bins.txt*
+  ```
+  Source Port
+  /path/to/source/port
+  ```
 
 
 # Changelog
+
+  Version Alpha 0.0.3 (2023/04/20)
+  - Added a new feature: the usage of files (See above) to enter in pre-defined locations for arguments, hopefully speeding up the process of launching Doom in the future.
+  - Added new file, ``./src/tools/argumentparser.c``. It includes the function ``void argumentparser(FILE* filestream, char* argument)``.
+    - The current operation of the function is taking all the available info from ``filestream`` and putting it into an array of strings called ``argumentstorage``.
+    - Then, the user is prompted to enter the entry they choose. Currently, it is *far* from working. But, it does work! I have, by entering random combinations of 0, 1, 2, and 3, have been able to somehow achieve different combinations of source port and IWAD as "intended."
+    - It should be noted that the current use of ``argumentparser()`` is not something I intend to keep permanent; it will likely be changed to merely take a number, take a filename, and return out a functional ``argv[]`` value to be used by the rest of the program.
+  - Updated ``sldl.h`` and ``Makefile`` to reflect the addition of a new function.
+  - Updated ``./README.md``'s "Usage" section to reflect the addition of a file system.
+  - Updated ``main.c`` to now reflect the changes to how arguments are taken.
 
   Version Alpha 0.0.2 (2023/04/18)
   - Added new directory, ``./src/tools/``.
