@@ -1,54 +1,61 @@
-#include <stdio.h>
+#include <ncurses.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include "sldl.h"
 
 int main() {
 
-  // First thing we need to do is open the files relating to configuration.
-  FILE* binsfilepath = fopen("bins.txt", "r");
-  FILE* iwadfilepath = fopen("iwad.txt", "r");
-
-  // Do some rudementary error handling - brush up on this in the future.
-  if(binsfilepath == NULL) {
-    printf("\nError! bins.txt does not exist.");
-    return 1;
-  }
-  if(iwadfilepath == NULL) {
-    printf("\nError! iwad.txt does not exist.");
-    return 1;
-  }
-
-  // And then we call the variables that make up our binary and our IWAD.
-  char binary[64];
-  char iwad[64];
-  char argone[16];
-
-  // We first define our Binary.
-  printf("\nPlease select your binary:");
-  argumentparser(binsfilepath, binary);
-  // Then we define our IWAD.
-  printf("\nPlease select your IWAD:");
-  argumentparser(iwadfilepath, iwad);
-  // We run the Binary's path through our parser:
-  binarypartitioner(binary, argone);
-  // And we set up our args:
+  // Current/Alpha setup for arguments:
   char* args[4];
-  args[0] = argone;
+  args[0] = malloc(64);
   args[1] = "-iwad";
-  args[2] = iwad;
+  args[2] = malloc(64);
   args[3] = NULL;
-  // Close our files down:
-  fclose(binsfilepath);
-  fclose(iwadfilepath);
 
-  // Print out the nessicary information for diagnosis of what we're launching:
-  printf("\n\nBinary:	%s",binary);
-  printf("\nIwad:	%s",iwad);
-  for(int i = 0; i < 4; i++)
-    printf("\nargv[%d]:		%s",i,args[i]);
+  // Getting the screen size, checking for errors, returning in case of size being too small.
+  int Y,X;
+  initscr();
+  start_color();
+  getmaxyx(stdscr,Y,X);
+  noecho();
+  if(Y < 36 || X < 92) {
+    endwin();
+    printf("\nError: Screen size too small.");
+    printf("\nMinimum:	36-Y	92-X");
+    printf("\nYours:	%d-Y	%d-X",Y,X);
+    return 1;
+  }
 
-  // And launch:
-  execvp(binary, args);
+  // Setting Y/X to being the position of the windows.
+  Y = (Y - 36) / 2;
+  X = (X - 92) / 2;
+
+  // Now we run the Main Menu Loop.
+  mainmenu(Y,X,args);
+  clear();
+  refresh();
+  endwin();
+
+  // When done, args[] should have all arguments filled in.
+  // We then need to process the binary name from the path.
+  char* binarypath = malloc(64);
+  strcpy(binarypath, args[0]);
+
+  binarypartitioner(binarypath, args[0]);
+
+  printf("\nPre-launch check:");
+  printf("\nPath to binary:	%s",binarypath);
+  printf("\n\nList of args:");
+  for(int i = 0; args[i] != NULL; i++)
+    printf("\narg[%d]:	%s",i,args[i]);
+
+  execvp(binarypath, args);
+
+  // Freeing memory (duh)
+  free(binarypath);
+  free(args[0]);
+  free(args[2]);
+
   return 0;
 }
