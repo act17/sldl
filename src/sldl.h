@@ -2,6 +2,7 @@
 #define __SLDL_H
 
 void binarypartitioner(char* binarypath, char* binaryname);
-void argumentparser(FILE* filestream, char* argument);
+
+void mainmenu(int Y, int X, char** args);
 
 #endif
