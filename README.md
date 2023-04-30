@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Alpha 0.0.3 | 2023/04/20 (Haha, weed.)
+Alpha 0.0.4 | 2023/04/30 (Haha, weed.)
 
 
 # Description
@@ -20,18 +20,20 @@ Alpha 0.0.3 | 2023/04/20 (Haha, weed.)
 
   Currently, the usage of SLDL is as follows:
 
-  1) Create a file where ``sldl`` is located (The binary, not the repo.) called ``bins.txt`` and ``iwad.txt``.
-  2) Enter name/path information in the two .txt files, example below.
-  3) Run ``sldl`` and select your Source Port/IWAD.
-
-  *bins.txt*
-  ```
-  Source Port
-  /path/to/source/port
-  ```
-
+  1) Compile and run SLDL.
+  2) Enter the path to the binary you wish to run.
+  3) Enter the path to the IWAD you wish to run.
 
 # Changelog
+
+  Version Alpha 0.0.4 (2023/04/30)
+  - Added NCurses support.
+  - Temporarily depricated the use of files for the sake of simplifying the development process.
+  - Removed ``./src/tools/argumentparser.c``, removed the heading for ``void argumentparser(FILE* filestream, char* argument)`` in ``./src/sldl.h``.
+  - Added directory ``./src/gui/``
+    - Currently contains one file: ``./src/gui/mainmenu.c``. It includes the function ``void mainmenu(int Y, int X, char** args)``. Will be used in the future to access other functions that allow you to select binaries, IWADs, PWADs, and other command-line arguments before running.
+  - Altered ``./src/main.c`` to now handle the "higher-up" management of args used to run the program alongside NCurses initialization.
+  - Altered ``./Makefile`` to reflect changes to project structure.
 
   Version Alpha 0.0.3 (2023/04/20)
   - Added a new feature: the usage of files (See above) to enter in pre-defined locations for arguments, hopefully speeding up the process of launching Doom in the future.
