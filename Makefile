@@ -1,8 +1,8 @@
-OBJS = src/main.c src/tools/binarypartitioner.c src/tools/argumentparser.c
+OBJS = src/main.c src/tools/binarypartitioner.c src/gui/mainmenu.c
 CFLAG = -Wall -Werror -Wpedantic
 CC = gcc
 INCLUDE =
-LIBS =
+LIBS = -lncurses
 
 # This is used for formatting.
 FM = astyle
