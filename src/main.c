@@ -8,9 +8,9 @@ int main() {
 
   // Current/Alpha setup for arguments:
   char* args[4];
-  args[0] = malloc(64);
+  args[0] = malloc(sizeof(char) * 64);
   args[1] = "-iwad";
-  args[2] = malloc(64);
+  args[2] = malloc(sizeof(char) * 64);
   args[3] = NULL;
 
   // Getting the screen size, checking for errors, returning in case of size being too small.
@@ -45,8 +45,8 @@ int main() {
   binarypartitioner(binarypath, args[0]);
 
   printf("\nPre-launch check:");
-  printf("\nPath to binary:	%s",binarypath);
-  printf("\n\nList of args:");
+  printf("\n\nPath to binary:\n%s",binarypath);
+  printf("\nList of args:");
   for(int i = 0; args[i] != NULL; i++)
     printf("\narg[%d]:	%s",i,args[i]);
 
@@ -56,6 +56,5 @@ int main() {
   free(binarypath);
   free(args[0]);
   free(args[2]);
-
   return 0;
 }
