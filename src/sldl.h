@@ -4,5 +4,6 @@
 void binarypartitioner(char* binarypath, char* binaryname);
 void mainmenu(int Y, int X, char** args);
 void argselect(int Y, int X, char* filename, char* arg);
+void infoscreen(int Y, int X);
 
 #endif
