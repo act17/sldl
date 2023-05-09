@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Beta 0.1.0 | 2023/05/09
+Beta 0.1.1 | 2023/05/09
 
 
 # Description
@@ -42,6 +42,14 @@ Beta 0.1.0 | 2023/05/09
 
 
 # Changelog
+
+  Version Beta 0.1.1 (2023/05/09)
+  - Added new file, ``src/gui/infoscreen.c``. Has the function ``void infoscreen(int Y, int X)``.
+    - It simply displays the current version, date of version release, info about the program, and info about the GNU License.
+  - Altered ``mainmenu.c`` to increase visual flair, and to add functionality with ``infoscreen()``.
+  - Altered ``argselect.c`` to increase visual flair and to remove windows called by the function.
+  - Added headers in ``sldl.h`` for ``infoscreen()``.
+  - Added new file to ``Makefile``.
 
   Version Beta 0.1.0 (2023/05/09)
   - Readded the use of files.
