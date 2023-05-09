@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Alpha 0.0.4 | 2023/04/30 (Haha, weed.)
+Beta 0.1.0 | 2023/05/09
 
 
 # Description
@@ -20,11 +20,37 @@ Alpha 0.0.4 | 2023/04/30 (Haha, weed.)
 
   Currently, the usage of SLDL is as follows:
 
-  1) Compile and run SLDL.
-  2) Enter the path to the binary you wish to run.
-  3) Enter the path to the IWAD you wish to run.
+  1)  Compile SLDL.
+  2)  Make two files in the directory that the binary ``sldl`` is within; ``bins.txt`` and ``iwad.txt``.
+  3)  Enter the names and paths to the binaries in ``bins.txt``, and names and paths to the IWADs in ``iwad.txt``. Refer to below for examples.
+
+  *File: bins.txt*
+  ```
+  Crispy Doom
+  /home/user/games/doom/crispy-doom
+  GZDoom
+  /home/user/games/gzdoom/gzdoom
+  ```
+
+  *File: iwad.txt*
+  ```
+  Doom II: Hell on Earth
+  /home/user/games/doom/doom2.wad
+  ```
+
+  4) Run ``sldl`` and follow onscreen instructions to play Doom.
+
 
 # Changelog
+
+  Version Beta 0.1.0 (2023/05/09)
+  - Readded the use of files.
+  - Updated ``main.c`` to now work with the new system for selecting arguments.
+  - Updated ``mainmenu.c`` to now include the system of selecting arguments from files.
+  - Added new file: ``src/gui/argselect.c``. Includes the function ``void argselect(int Y, int X, char* filename, char* arg)``.
+    - ``argselect()`` takes the information from the file specified in ``filename``, and displays the potential options. Then, the user can select an option, and it will be written to ``arg``.
+  - Added headers in ``sldl.h`` to account for ``argselect.c``.
+  - Added new files into ``Makefile``.
 
   Version Alpha 0.0.4 (2023/04/30)
   - Added NCurses support.
