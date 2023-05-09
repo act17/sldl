@@ -16,13 +16,15 @@ void mainmenu(int Y, int X, char** args) {
 
     // Initializing screen:
     noecho();
-    init_pair(1,COLOR_BLACK,COLOR_WHITE);
-    init_pair(2,COLOR_CYAN,COLOR_CYAN);
     WINDOW * mainmenuwin = newwin(36,92,Y,X);
+    WINDOW * controlwin = newwin(4,90,Y + 31,X+1);
     wbkgd(stdscr,COLOR_PAIR(2));
     wbkgd(mainmenuwin,COLOR_PAIR(1));
+    wbkgd(controlwin,COLOR_PAIR(1));
     wattron(mainmenuwin,COLOR_PAIR(1));
+    wattron(controlwin,COLOR_PAIR(1));
     box(mainmenuwin,0,0);
+    box(controlwin,0,0);
     keypad(mainmenuwin,true);
 
     // Printing info:
@@ -32,15 +34,14 @@ void mainmenu(int Y, int X, char** args) {
     mvwprintw(mainmenuwin,4,1,"IWAD path:");
     mvwprintw(mainmenuwin,5,1,"%s",iwadpath);
 
-    wattron(mainmenuwin,A_REVERSE);
-    mvwprintw(mainmenuwin,33,1,"CONTROLS:");
-    mvwprintw(mainmenuwin,34,1,"B - Select Binary | I - Select IWAD | RETURN - Play Doom!");
-    wattroff(mainmenuwin,A_BOLD);
-    wattroff(mainmenuwin,A_REVERSE);
+    wattron(controlwin,A_BOLD);
+    mvwprintw(controlwin,1,1,"B - Select Binary | G - Select IWAD | RETURN - Play Doom!");
+    mvwprintw(controlwin,2,1,"I - Info Screen");
 
     // Refreshing screen:
     refresh();
     wrefresh(mainmenuwin);
+    wrefresh(controlwin);
     wrefresh(stdscr);
 
     // Input-output:
@@ -48,15 +49,30 @@ void mainmenu(int Y, int X, char** args) {
     switch(userchoice) {
     case 'b':
       wclear(mainmenuwin);
+      wclear(controlwin);
       wrefresh(mainmenuwin);
+      wrefresh(controlwin);
       delwin(mainmenuwin);
+      delwin(controlwin);
       argselect(Y,X,"bins.txt",binarypath);
+      break;
+    case 'g':
+      wclear(mainmenuwin);
+      wclear(controlwin);
+      wrefresh(mainmenuwin);
+      wrefresh(controlwin);
+      delwin(mainmenuwin);
+      delwin(controlwin);
+      argselect(Y,X,"iwad.txt",iwadpath);
       break;
     case 'i':
       wclear(mainmenuwin);
+      wclear(controlwin);
       wrefresh(mainmenuwin);
+      wrefresh(controlwin);
       delwin(mainmenuwin);
-      argselect(Y,X,"iwad.txt",iwadpath);
+      delwin(controlwin);
+      infoscreen(Y, X);
       break;
     case 10:
       break;
