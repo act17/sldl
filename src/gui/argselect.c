@@ -10,12 +10,16 @@ void argselect(int Y, int X, char* filename, char* arg) {
   init_pair(3,COLOR_WHITE,COLOR_BLACK);
   WINDOW * argwin = newwin(36, 92, Y, X);
   WINDOW * listwin = newwin(18, 90, Y + 1, X + 1);
+  WINDOW * controlwin = newwin(4, 90, Y + 31, X + 1);
   wbkgd(argwin,COLOR_PAIR(1));
   wattron(argwin,COLOR_PAIR(1));
   wbkgd(listwin,COLOR_PAIR(3));
   wattron(listwin,COLOR_PAIR(3));
+  wbkgd(controlwin,COLOR_PAIR(1));
+  wattron(controlwin,COLOR_PAIR(1));
   box(argwin,0,0);
   box(listwin,0,0);
+  box(controlwin,0,0);
   keypad(argwin,true);
 
   // File-related information gathering:
@@ -33,14 +37,15 @@ void argselect(int Y, int X, char* filename, char* arg) {
   fclose(file);
 
   // Printing information at bottom:
-  wattron(argwin,A_BOLD);
-  mvwprintw(argwin, 33, 1, "CONTROLS:");
-  mvwprintw(argwin, 34, 1, "UP/DOWN/RETURN - SELECT ENTRY");
+  wattron(controlwin,A_BOLD);
+  mvwprintw(controlwin, 1, 1, "CONTROLS:");
+  mvwprintw(controlwin, 1, 1, "UP/DOWN/RETURN - SELECT ENTRY");
 
   // Refreshing:
   refresh();
   wrefresh(argwin);
   wrefresh(listwin);
+  wrefresh(controlwin);
   wrefresh(stdscr);
 
   // Input-output:
@@ -81,6 +86,17 @@ void argselect(int Y, int X, char* filename, char* arg) {
     if(arg[i] == '\n')
       arg[i] = '\0';
   }
+
+  // Then we delete the windows and return:
+  wclear(argwin);
+  wclear(listwin);
+  wclear(controlwin);
+  wrefresh(argwin);
+  wrefresh(listwin);
+  wrefresh(controlwin);
+  delwin(argwin);
+  delwin(listwin);
+  delwin(controlwin);
 
   return;
 }
