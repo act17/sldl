@@ -1,4 +1,4 @@
-OBJS = src/main.c src/tools/binarypartitioner.c src/gui/mainmenu.c
+OBJS = src/main.c src/tools/binarypartitioner.c src/gui/mainmenu.c src/gui/argselect.c
 CFLAG = -Wall -Werror -Wpedantic
 CC = gcc
 INCLUDE =
