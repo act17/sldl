@@ -17,6 +17,9 @@ int main() {
   int Y,X;
   initscr();
   start_color();
+  init_pair(1,COLOR_BLACK,COLOR_WHITE);
+  init_pair(2,COLOR_CYAN,COLOR_CYAN);
+  init_pair(3,COLOR_WHITE,COLOR_BLACK);
   getmaxyx(stdscr,Y,X);
   noecho();
   if(Y < 36 || X < 92) {
@@ -41,7 +44,6 @@ int main() {
   // We then need to process the binary name from the path.
   char* binarypath = malloc(64);
   strcpy(binarypath, args[0]);
-
   binarypartitioner(binarypath, args[0]);
 
   printf("\nPre-launch check:");
