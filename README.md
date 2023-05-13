@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Beta 0.1.1 | 2023/05/09
+Beta 0.1.2 | 2023/05/13
 
 
 # Description
@@ -42,6 +42,13 @@ Beta 0.1.1 | 2023/05/09
 
 
 # Changelog
+
+  Version Beta 0.1.2 (2023/05/09)
+  - Added new feature, the ability to quit SLDL. This is made in anticipation of a new feature that will fork the process for running the DOOM binary so that launching Doom does not subsequently terminate SLDL.
+    - This is done by adding a new integer in ``main()`` - ``int quitcheck``. It is passed as a pointer into ``mainmenu()``, and upon striking the ``Q`` key, will be set to ``1``, immediately terminating the process of ``mainmenu()`` and informing ``main()`` to not launch the binary of DOOM.
+    - ``sldl.h`` and ``mainmenu.c`` have been updated to account for this feature.
+  - Added new feature to ``mainmenu()``, a way of preventing Segfaults by checking to see if the strings ``binarypath`` and ``iwadpath`` have been filled. If they are not filled, then SLDL will try to launch DOOM using empty strings, causing a Segfault. This new check happens after striking the ``RETURN`` key, seeing if the first character of each string is equal to ``'\0'``.
+    - A new function may be added in the future that checks to see if they are valid files. This may be extended into ``argselect()`` as to inform the user if Binaries, IWADs, or PWADs are given a valid path.
 
   Version Beta 0.1.1 (2023/05/09)
   - Added new file, ``src/gui/infoscreen.c``. Has the function ``void infoscreen(int Y, int X)``.
