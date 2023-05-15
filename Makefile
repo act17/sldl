@@ -1,16 +1,16 @@
-OBJS = src/main.c src/tools/binarypartitioner.c src/gui/mainmenu.c src/gui/argselect.c src/gui/infoscreen.c
-CFLAG = -Wall -Werror -Wpedantic
+OBJS = src/main.c src/tools/binarypartitioner.c src/tools/fileinit.c src/gui/mainmenu.c src/gui/argselect.c src/gui/infoscreen.c
+CFLAG = -Wall -Werror -Wpedantic -g
 CC = gcc
 INCLUDE =
 LIBS = -lncurses
 
 # This is used for formatting.
 FM = astyle
-FFLAG = -s2 -n
+FFLAG = -s2 -n -A7
 
 
 sldl:${OBJ}
-	${CC} ${CFLAG} ${INCLUDES} -o $@ ${OBJS} ${LIBS} -g
+	${CC} ${CFLAG} ${INCLUDES} -o $@ ${OBJS} ${LIBS}
 
 format:${OBJ}
 	${FM} ${OBJS} ${FFLAG} 
