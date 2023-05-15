@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Beta 0.1.2 | 2023/05/13
+Beta 0.2.0 | 2023/05/15
 
 
 # Description
@@ -21,7 +21,7 @@ Beta 0.1.2 | 2023/05/13
   Currently, the usage of SLDL is as follows:
 
   1)  Compile SLDL.
-  2)  Make two files in the directory that the binary ``sldl`` is within; ``bins.txt`` and ``iwad.txt``.
+  2)  Make two files in the directory that the binary ``sldl`` is within; ``bins.txt`` and ``iwad.txt``. They will be created in the case that they do not exist.
   3)  Enter the names and paths to the binaries in ``bins.txt``, and names and paths to the IWADs in ``iwad.txt``. Refer to below for examples.
 
   *File: bins.txt*
@@ -43,7 +43,16 @@ Beta 0.1.2 | 2023/05/13
 
 # Changelog
 
-  Version Beta 0.1.2 (2023/05/09)
+  Version Beta 0.2.0 (2023/05/15)
+  - Added new feature, the creation of ``bins.txt`` and ``iwad.txt`` in the case that they are not already created in the ``SLDL`` directory.
+    - This is done by a new function, ``int fileinit()``. It first tries to open ``bins.txt``, and if it doesn't exist, it shall create ``bins.txt`` in the directory ``sldl`` is in, and subsequently fill it with an example of how to properly enter entries within the file. It repeats this process for ``iwad.txt``.
+    - The function ``fileinit()`` is in a new file, ``src/tools/fileinit.c``.
+    - ``main()`` has been updated to run ``fileinit()``, terminating the program early if ``fileinit()`` returns ``1``, indicating an absent file.
+    - Headers have been added for ``fileinit.c`` in ``sldl.h``, and the file has been added to ``Makefile``.
+  - Updated ``./Makefile`` to now use GNU styling for formatting.
+  - All files not yet mentioned have been formatted in GNU style.
+
+  Version Beta 0.1.2 (2023/05/13)
   - Added new feature, the ability to quit SLDL. This is made in anticipation of a new feature that will fork the process for running the DOOM binary so that launching Doom does not subsequently terminate SLDL.
     - This is done by adding a new integer in ``main()`` - ``int quitcheck``. It is passed as a pointer into ``mainmenu()``, and upon striking the ``Q`` key, will be set to ``1``, immediately terminating the process of ``mainmenu()`` and informing ``main()`` to not launch the binary of DOOM.
     - ``sldl.h`` and ``mainmenu.c`` have been updated to account for this feature.
