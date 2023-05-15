@@ -4,7 +4,8 @@
 
 // This function takes binarypath and returns the actual name of
 // the binary.
-void binarypartitioner(char* binarypath, char* binaryname) {
+void binarypartitioner(char* binarypath, char* binaryname)
+{
 
   // We find the length of the binary's name with the last usage of '/'.
   int binarynamelength = 0;
