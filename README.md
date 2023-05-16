@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Beta 0.2.0 | 2023/05/15
+Beta 0.2.1 | 2023/05/16
 
 
 # Description
@@ -42,6 +42,15 @@ Beta 0.2.0 | 2023/05/15
 
 
 # Changelog
+
+  Version Beta 0.2.1 (2023/05/16)
+  - Added new file, ``./src/tools/filevalidcheck.c``. It includes the function ``int filevalidcheck(char* path)``.
+    - It's essentially a macro that performs the simple job of returning ``1`` if the file given in ``path`` is invalid, and ``0`` if it is.
+    - It's used in ``argcheck()`` as a means to prevent invalid entries from being selected. In the case an entry is invalid, it will not be permitted to be selected, and a brief warning message will be printed on the bottom of the screen.
+  - Added new feature, the ability to quit the argument selecting screen without entering an entry.
+  - Updated headers in ``sldl.h``.
+  - Added new file in ``Makefile``, and changed formatting style to K&R.
+  - All ``*.c`` files have been reformatted.
 
   Version Beta 0.2.0 (2023/05/15)
   - Added new feature, the creation of ``bins.txt`` and ``iwad.txt`` in the case that they are not already created in the ``SLDL`` directory.
