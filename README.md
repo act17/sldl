@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Beta 0.2.1 | 2023/05/16
+Beta 0.2.2 | 2023/05/16
 
 
 # Description
@@ -42,6 +42,11 @@ Beta 0.2.1 | 2023/05/16
 
 
 # Changelog
+
+  Version Beta 0.2.2 (2023/05/16)
+  - Altered ``mainmenu()`` considerably to now be more visually appealing.
+  - Removed seemingly unneeded calls of ``werase()`` and similar functions in ``mainmenu()``.
+  - Altered ``argselect()`` to now have controls consistent with the rest of the program.
 
   Version Beta 0.2.1 (2023/05/16)
   - Added new file, ``./src/tools/filevalidcheck.c``. It includes the function ``int filevalidcheck(char* path)``.
