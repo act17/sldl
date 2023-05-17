@@ -10,8 +10,8 @@ void argselect(int Y, int X, char* filename, char* arg)
   // Window init:
   init_pair(3,COLOR_WHITE,COLOR_BLACK);
   WINDOW * argwin = newwin(36, 92, Y, X);
-  WINDOW * listwin = newwin(18, 90, Y + 1, X + 1);
-  WINDOW * controlwin = newwin(5, 90, Y + 31, X + 1);
+  WINDOW * listwin = newwin(31, 90, Y + 1, X + 1);
+  WINDOW * controlwin = newwin(3, 90, Y + 32, X + 1);
   wbkgd(argwin,COLOR_PAIR(1));
   wattron(argwin,COLOR_PAIR(1));
   wbkgd(listwin,COLOR_PAIR(3));
@@ -24,7 +24,7 @@ void argselect(int Y, int X, char* filename, char* arg)
   keypad(argwin,true);
 
   // File-related information gathering:
-  char arguments[16][64];
+  char arguments[28][64];
   char* buffer = malloc(sizeof(char) * 64);
   FILE* file = fopen(filename,"r");
   int linecount = 0;
@@ -39,9 +39,7 @@ void argselect(int Y, int X, char* filename, char* arg)
 
   // Printing information at bottom:
   wattron(controlwin,A_BOLD);
-  mvwprintw(controlwin, 1, 1, "CONTROLS:");
-  mvwprintw(controlwin, 2, 1, "UP/DOWN/RETURN - SELECT ENTRY");
-  mvwprintw(controlwin, 3, 1, "Q - RETURN TO PREVIOUS SCREEN");
+  mvwprintw(controlwin, 1, 1, "Up/Down/Return - Select Entry | Q - Return to Previous Screen");
 
   // Refreshing:
   refresh();
