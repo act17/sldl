@@ -19,23 +19,33 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     // Initializing screen:
     noecho();
     WINDOW * mainmenuwin = newwin(36,92,Y,X);
+    WINDOW * binswin = newwin(3,90,Y+1,X+1);
+    WINDOW * iwadwin = newwin(3,90,Y+4,X+1);
     WINDOW * controlwin = newwin(4,90,Y + 31,X+1);
     wbkgd(stdscr,COLOR_PAIR(2));
     wbkgd(mainmenuwin,COLOR_PAIR(1));
+    wbkgd(binswin,COLOR_PAIR(1));
+    wbkgd(iwadwin,COLOR_PAIR(1));
     wbkgd(controlwin,COLOR_PAIR(1));
     wattron(mainmenuwin,COLOR_PAIR(1));
+    wattron(binswin,COLOR_PAIR(1));
+    wattron(iwadwin,COLOR_PAIR(1));
     wattron(controlwin,COLOR_PAIR(1));
     box(mainmenuwin,0,0);
+    box(binswin,0,0);
+    box(iwadwin,0,0);
     box(controlwin,0,0);
     keypad(mainmenuwin,true);
 
     // Printing info:
-    wattron(mainmenuwin,A_BOLD);
-    mvwprintw(mainmenuwin,1,1,"Binary path:");
-    mvwprintw(mainmenuwin,2,1,"%s",binarypath);
-    mvwprintw(mainmenuwin,4,1,"IWAD path:");
-    mvwprintw(mainmenuwin,5,1,"%s",iwadpath);
-
+    wattron(binswin,A_BOLD);
+    wattron(iwadwin,A_BOLD);
+    mvwprintw(binswin,1,1,"Binary path:");
+    mvwprintw(iwadwin,1,1,"IWAD path:");
+    wattroff(binswin,A_BOLD);
+    wattroff(iwadwin,A_BOLD);
+    mvwprintw(binswin,1,14,"%s",binarypath);
+    mvwprintw(iwadwin,1,14,"%s",iwadpath);
     wattron(controlwin,A_BOLD);
     mvwprintw(controlwin,1,1,"B - Select Binary | G - Select IWAD | RETURN - Play Doom!");
     mvwprintw(controlwin,2,1,"I - Info Screen | Q - Quit SLDL");
@@ -52,6 +62,8 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     // Refreshing screen:
     refresh();
     wrefresh(mainmenuwin);
+    wrefresh(binswin);
+    wrefresh(iwadwin);
     wrefresh(controlwin);
     wrefresh(stdscr);
 
@@ -59,30 +71,12 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     userchoice = wgetch(mainmenuwin);
     switch(userchoice) {
     case 'b':
-      wclear(mainmenuwin);
-      wclear(controlwin);
-      wrefresh(mainmenuwin);
-      wrefresh(controlwin);
-      delwin(mainmenuwin);
-      delwin(controlwin);
       argselect(Y,X,"bins.txt",binarypath);
       break;
     case 'g':
-      wclear(mainmenuwin);
-      wclear(controlwin);
-      wrefresh(mainmenuwin);
-      wrefresh(controlwin);
-      delwin(mainmenuwin);
-      delwin(controlwin);
       argselect(Y,X,"iwad.txt",iwadpath);
       break;
     case 'i':
-      wclear(mainmenuwin);
-      wclear(controlwin);
-      wrefresh(mainmenuwin);
-      wrefresh(controlwin);
-      delwin(mainmenuwin);
-      delwin(controlwin);
       infoscreen(Y, X);
       break;
     case 'q':
