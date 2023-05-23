@@ -7,13 +7,14 @@
 int main()
 {
 
-  // Current/Alpha setup for arguments:
-  char* args[4];
+  // Current setup for arguments:
+  char* args[64];
   args[0] = malloc(sizeof(char) * 64);
   args[1] = "-iwad";
   args[2] = malloc(sizeof(char) * 64);
-  args[3] = NULL;
-  char* binarypath = malloc(64);
+  for(int i = 3; i < 64; i++)
+    args[i] = malloc(sizeof(char) * 64);
+  char* binarypath = malloc(sizeof(char) * 64);
 
   // First check to see if 'bins.txt' or 'iwad.txt' has been created:
   if(fileinit() == 1)
@@ -60,10 +61,18 @@ int main()
     strcpy(binarypath, args[0]);
     binarypartitioner(binarypath, args[0]);
 
+    // Then we find where args[] ends, and write "NULL" to the next argument.
+    for(int i = 0; i < 64; i++) {
+      if(args[i][0] == '\0') {
+        args[i] = NULL;
+        break;
+      }
+    }
+
     printf("\nPre-launch check:");
     printf("\n\nPath to binary:\n%s",binarypath);
     printf("\nList of args:");
-    for(int i = 0; args[i] != NULL; i++)
+    for(int i = 0; args[i - 1] != NULL; i++)
       printf("\narg[%d]:	%s",i,args[i]);
 
     execvp(binarypath, args);
