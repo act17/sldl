@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Beta 0.2.2 | 2023/05/16
+Beta 0.3.0 | 2023/05/22
 
 
 # Description
@@ -42,6 +42,12 @@ Beta 0.2.2 | 2023/05/16
 
 
 # Changelog
+
+  Version Beta 0.3.0 (2023/05/22)
+  - Added new feature - extra parameters.
+    - ``mainmenu()`` handles this feature. There's 10 extra parameters that a user can fill.
+    - ``main()``'s handling of ``args[]`` has now changed. Instead of each entry of ``args[]`` above ``2`` (Which is where the binary and IWAD are found) being set to ``NULL``, they are now ``malloc()``'d and set to ``'\0'`` by default. ``main()`` now finds where the first unfilled argument is, and sets that entry to ``NULL``.
+  - Fixed a bug in ``main()`` where the pre-launch check would not print out the final valid argument.
 
   Version Beta 0.2.2 (2023/05/16)
   - Altered ``mainmenu()`` considerably to now be more visually appealing.
