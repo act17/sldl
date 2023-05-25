@@ -10,7 +10,7 @@ void argselect(int Y, int X, char* filename, char* arg)
   // Window init:
   init_pair(3,COLOR_WHITE,COLOR_BLACK);
   WINDOW * argwin = newwin(36, 92, Y, X);
-  WINDOW * listwin = newwin(31, 90, Y + 1, X + 1);
+  WINDOW * listwin = newwin(30, 90, Y + 1, X + 1);
   WINDOW * controlwin = newwin(3, 90, Y + 32, X + 1);
   wbkgd(argwin,COLOR_PAIR(1));
   wattron(argwin,COLOR_PAIR(1));
@@ -108,7 +108,7 @@ void argselect(int Y, int X, char* filename, char* arg)
     choice = 0;
     wattron(argwin,COLOR_PAIR(4));
     wattron(argwin,A_BOLD);
-    mvwprintw(argwin,29,1,"ERROR! Selected argument is not valid!");
+    mvwprintw(argwin,31,1,"ERROR! Selected argument is not valid!");
     wrefresh(argwin);
     arg[0] = '\0';
   }
