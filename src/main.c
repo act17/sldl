@@ -8,12 +8,10 @@ int main()
 {
 
   // Current setup for arguments:
-  char* args[64];
-  args[0] = malloc(sizeof(char) * 64);
-  args[1] = "-iwad";
-  args[2] = malloc(sizeof(char) * 64);
-  for(int i = 3; i < 64; i++)
+  char* args[32];
+  for(int i = 0; i < 32; i++)
     args[i] = malloc(sizeof(char) * 64);
+  args[1] = "-iwad";
   char* binarypath = malloc(sizeof(char) * 64);
 
   // First check to see if 'bins.txt' or 'iwad.txt' has been created:
@@ -62,7 +60,7 @@ int main()
     binarypartitioner(binarypath, args[0]);
 
     // Then we find where args[] ends, and write "NULL" to the next argument.
-    for(int i = 0; i < 64; i++) {
+    for(int i = 0; i < 27; i++) {
       if(args[i][0] == '\0') {
         args[i] = NULL;
         break;
