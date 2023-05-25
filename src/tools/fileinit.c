@@ -30,7 +30,19 @@ int fileinit()
     return 1;
   }
 
-  fclose(iwad);
+  FILE* pwad = fopen("pwad.txt","r");
+  if(!pwad) {
+    FILE* pwad = fopen("pwad.txt","w+");
+    printf("\nError!\n");
+    printf("pwad.txt does not exist, and has been created in your directory with an example provided.\n");
+    fwrite(defaultname,1,13,pwad);
+    fwrite(defaultpath,1,13,pwad);
+    fclose(pwad);
+    return 1;
+  }
+
   fclose(bins);
+  fclose(iwad);
+  fclose(pwad);
   return 0;
 }
