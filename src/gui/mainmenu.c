@@ -5,12 +5,20 @@
 
 void mainmenu(int Y, int X, char** args, int* quitcheck)
 {
-
   // Initializing variables:
   char* binarypath = malloc(sizeof(char) * 64);
   char* iwadpath = malloc(sizeof(char) * 64);
-  char* parameter = malloc(sizeof(char) * 256);
-  int extraargcount = 3;
+  char* filepara = "-file";
+  char* pwads[12];
+  char* parameters[12];
+
+  // It's jank as heck, but it works:
+  for(int i = 0; i < 12; i++)
+    pwads[i] = malloc(sizeof(char) * 64);
+  for(int i = 0; i < 12; i = i + 2)
+    strcpy(pwads[i],filepara);
+  for(int i = 0; i < 12; i++)
+    parameters[i] = malloc(sizeof(char) * 64);
 
   // Loop that controls when mainmenu() is to stop,
   // allows for recreation of appearance.
@@ -23,24 +31,28 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     WINDOW * mainmenuwin = newwin(36,92,Y,X);
     WINDOW * binswin = newwin(3,90,Y+1,X+1);
     WINDOW * iwadwin = newwin(3,90,Y+4,X+1);
-    WINDOW * parawin = newwin(13,90,Y+7,X+1);
+    WINDOW * pwadwin = newwin(9,90,Y+7,X+1);
+    WINDOW * parawin = newwin(13,90,Y+16,X+1);
     WINDOW * controlwin = newwin(4,90,Y + 31,X+1);
     wbkgd(stdscr,COLOR_PAIR(2));
     wbkgd(mainmenuwin,COLOR_PAIR(1));
     wbkgd(binswin,COLOR_PAIR(1));
     wbkgd(iwadwin,COLOR_PAIR(1));
+    wbkgd(pwadwin,COLOR_PAIR(1));
     wbkgd(parawin,COLOR_PAIR(1));
     wbkgd(controlwin,COLOR_PAIR(1));
 
     wattron(mainmenuwin,COLOR_PAIR(1));
     wattron(binswin,COLOR_PAIR(1));
     wattron(iwadwin,COLOR_PAIR(1));
+    wattron(pwadwin,COLOR_PAIR(1));
     wattron(parawin,COLOR_PAIR(1));
     wattron(controlwin,COLOR_PAIR(1));
 
     box(mainmenuwin,0,0);
     box(binswin,0,0);
     box(iwadwin,0,0);
+    box(pwadwin,0,0);
     box(parawin,0,0);
     box(controlwin,0,0);
     keypad(mainmenuwin,true);
@@ -48,19 +60,24 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     // Printing info:
     wattron(binswin,A_BOLD);
     wattron(iwadwin,A_BOLD);
+    wattron(pwadwin,A_BOLD);
     wattron(parawin,A_BOLD);
     wattron(controlwin,A_BOLD);
     mvwprintw(binswin,1,1,"Binary path:");
     mvwprintw(iwadwin,1,1,"IWAD path:");
+    mvwprintw(pwadwin,1,1,"PWAD paths:");
     mvwprintw(parawin,1,1,"Extra Parameters:");
     wattroff(binswin,A_BOLD);
     wattroff(iwadwin,A_BOLD);
+    wattroff(pwadwin,A_BOLD);
     wattroff(parawin,A_BOLD);
     mvwprintw(binswin,1,14,"%s",binarypath);
     mvwprintw(iwadwin,1,14,"%s",iwadpath);
+    for(int i = 0; i < 6; i++)
+      mvwprintw(pwadwin,i + 2,1,"%d: %s",i,pwads[i * 2 + 1]);
     for(int i = 0; i < 10; i++)
-      mvwprintw(parawin,i + 2,1,"%d: %s",i,args[i + 3]);
-    mvwprintw(controlwin,1,1,"B - Select Binary | G - Select IWAD | P - Enter Parameters");
+      mvwprintw(parawin,i + 2,1,"%d: %s",i,parameters[i]);
+    mvwprintw(controlwin,1,1,"B - Select Binary | G - Select IWAD | P - Enter Parameters | M - Select PWADs");
     mvwprintw(controlwin,2,1,"RETURN - Play Doom! | I - Info Screen | Q - Quit SLDL");
 
     // Printing error info in case of unfilled arguments.
@@ -77,6 +94,7 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     wrefresh(mainmenuwin);
     wrefresh(binswin);
     wrefresh(iwadwin);
+    wrefresh(pwadwin);
     wrefresh(parawin);
     wrefresh(controlwin);
     wrefresh(stdscr);
@@ -90,12 +108,11 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     case 'g':
       argselect(Y,X,"iwad.txt",iwadpath);
       break;
+    case 'm':
+      pwadselect(Y,X,pwads);
+      break;
     case 'p':
-      echo();
-      mvwscanw(parawin,extraargcount - 1,4,"%s",parameter);
-      strcpy(args[extraargcount],parameter);
-      extraargcount++;
-      noecho();
+      paraselect(Y,X,parameters);
       break;
     case 'i':
       infoscreen(Y, X);
@@ -121,21 +138,33 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
       else
         goodcheck = 1;
     }
-
     if(goodcheck == 1)
       break;
   }
 
-  // Exporting main arguments:
+  // Exporting arguments:
   if(userchoice != 'q') {
     strcpy(args[0],binarypath);
     strcpy(args[2],iwadpath);
+
+    int pwadcount = 3;
+    for(int i = 0; pwads[i][0] != '\0'; i++) {
+      if(pwads[i + 1][0] == '\0')
+        break;
+      strcpy(args[i + 3],pwads[i]);
+      pwadcount++;
+    }
+
+    for(int i = 0; parameters[i][0] != '\0'; i++)
+      strcpy(args[pwadcount + i],parameters[i]);
   }
 
   // Freeing memory:
   free(binarypath);
   free(iwadpath);
-  free(parameter);
-
+  for(int i = 0; i < 12; i++)
+    free(pwads[i]);
+  for(int i = 0; i < 12; i++)
+    free(parameters[i]);
   return;
 }
