@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Beta 0.3.0 | 2023/05/22
+Beta 0.4.0 | 2023/05/25
 
 
 # Description
@@ -21,8 +21,8 @@ Beta 0.3.0 | 2023/05/22
   Currently, the usage of SLDL is as follows:
 
   1)  Compile SLDL.
-  2)  Make two files in the directory that the binary ``sldl`` is within; ``bins.txt`` and ``iwad.txt``. They will be created in the case that they do not exist.
-  3)  Enter the names and paths to the binaries in ``bins.txt``, and names and paths to the IWADs in ``iwad.txt``. Refer to below for examples.
+  2)  Make three files in the directory that the binary ``sldl`` is within; ``bins.txt``, ``iwad.txt``, and ``pwad.txt``. They will be created in the case that they do not exist.
+  3)  Enter the names and paths to the binaries/IWADs/PWADs in ``bins.txt``, ``iwad.txt``, and ``pwad.txt``. Refer to below for examples.
 
   *File: bins.txt*
   ```
@@ -42,6 +42,16 @@ Beta 0.3.0 | 2023/05/22
 
 
 # Changelog
+
+  Version Beta 0.4.0 (2023/05/25)
+  - Added new feature - PWADs!
+  - Altered how potential arguments are called in ``main()`` and ``mainmenu()``. Instead of before, where new parameters were simply written to ``args[]`` with ``args[0]`` and ``args[2]`` being reserved for whatever was written to ``binarypath`` and ``iwadpath`` respectively, there's now two new ``char**``s; ``char* parameters[12]`` and ``char* pwads[12]``.
+    - These two ``char**``s can be edited by way of two new functions: ``void pwadselect(int Y, int X, char** pwads)`` and ``void paraselect(int Y, int X, char** parameters)`` in the files ``./src/gui/pwadselect.c`` and ``./src/gui/paraselect.c`` respectively.
+    - These two functions offer the ability for users to enter up to 6 PWADs and up to 12 parameters. It also permits users to delete parameters and PWADs wholesale.
+    - In the case of ``pwadselect()``, it uses the already existing ``argselect()`` to choose a PWAD from ``pwad.txt``.
+  - Altered ``fileinit()`` to now detect if ``pwad.txt`` is a valid file.
+  - Altered ``sldl.h`` to include headers for the two new functions added.
+  - Altered ``Makefile`` to include ``paraselect.c`` and ``pwadselect.c``.
 
   Version Beta 0.3.0 (2023/05/22)
   - Added new feature - extra parameters.
