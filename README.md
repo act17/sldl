@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Beta 0.4.0 | 2023/05/25
+Beta 0.5.0 | 2023/05/26
 
 
 # Description
@@ -42,6 +42,15 @@ Beta 0.4.0 | 2023/05/25
 
 
 # Changelog
+
+  Version Beta 0.5.0 (2023/05/26)
+  - Added new feature - having SLDL automatically reopen after launching Doom.
+    - ``main()`` now uses ``fork()`` and ``waitpid()`` to have SLDL automatically reopen after launching Doom. Further alterations have been made to ``main()``, including when ``binarypath`` and ``args[]`` have memory allocated to them, and when the routine to exit NCurses occurs.
+  - ``mainmenu()``'s massive amount of ``wclear()`` and ``wrefresh()`` routines have been removed.
+  - The amount of elements in ``char* args[]`` has been reduced from 32 to 27, as to reflect all possible arguments.
+  - The amount of available parameters has been increased from the unintentional 10 to the originally-inteded 12. Changes are reflected in both ``mainmenu()`` and ``paraselect()``.
+  - ``paraselect()``'s "Delete" function now works.
+  - Code has been "cleaned up"; redundant comments have been removed and an attempt to standardize spacing has been introduced.
 
   Version Beta 0.4.0 (2023/05/25)
   - Added new feature - PWADs!
