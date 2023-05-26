@@ -6,7 +6,6 @@
 // the binary.
 void binarypartitioner(char* binarypath, char* binaryname)
 {
-
   // We find the length of the binary's name with the last usage of '/'.
   int binarynamelength = 0;
   for(int i = strlen(binarypath); binarypath[i] != '/'; i--)
