@@ -5,34 +5,39 @@
 
 void mainmenu(int Y, int X, char** args, int* quitcheck)
 {
-  // Initializing variables:
   char* binarypath = malloc(sizeof(char) * 64);
   char* iwadpath = malloc(sizeof(char) * 64);
   char* filepara = "-file";
   char* pwads[12];
   char* parameters[12];
+  int userchoice = 0;
+  int goodcheck = -1;
+  int pwadcount = 3;
 
-  // It's jank as heck, but it works:
-  for(int i = 0; i < 12; i++)
+  for(int i = 0; i < 12; i++) {
     pwads[i] = malloc(sizeof(char) * 64);
+    parameters[i] = malloc(sizeof(char) * 64);
+  }
   for(int i = 0; i < 12; i = i + 2)
     strcpy(pwads[i],filepara);
-  for(int i = 0; i < 12; i++)
-    parameters[i] = malloc(sizeof(char) * 64);
+
+  // For some unknown reason, args[3] and args[4]'s memory gets completely kaiboshed when mainmenu() closes,
+  // the memory is freed, and then is re-allocated when the function is re-called after launching.
+  // This solution corrects any potential issues where seemingly corrupted memory is treated as an argument, screwing up
+  // future launches.
+  // Dear God, I hope that this isn't a sign of something terrible.
+  args[3][0] = '\0';
+  args[4][0] = '\0';
 
   // Loop that controls when mainmenu() is to stop,
   // allows for recreation of appearance.
-  int userchoice = 0;
-  int goodcheck = -1;
   while(1) {
-
-    // Initializing screen:
     noecho();
     WINDOW * mainmenuwin = newwin(36,92,Y,X);
     WINDOW * binswin = newwin(3,90,Y+1,X+1);
     WINDOW * iwadwin = newwin(3,90,Y+4,X+1);
     WINDOW * pwadwin = newwin(9,90,Y+7,X+1);
-    WINDOW * parawin = newwin(13,90,Y+16,X+1);
+    WINDOW * parawin = newwin(15,90,Y+16,X+1);
     WINDOW * controlwin = newwin(4,90,Y + 31,X+1);
     wbkgd(stdscr,COLOR_PAIR(2));
     wbkgd(mainmenuwin,COLOR_PAIR(1));
@@ -41,14 +46,12 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     wbkgd(pwadwin,COLOR_PAIR(1));
     wbkgd(parawin,COLOR_PAIR(1));
     wbkgd(controlwin,COLOR_PAIR(1));
-
     wattron(mainmenuwin,COLOR_PAIR(1));
     wattron(binswin,COLOR_PAIR(1));
     wattron(iwadwin,COLOR_PAIR(1));
     wattron(pwadwin,COLOR_PAIR(1));
     wattron(parawin,COLOR_PAIR(1));
     wattron(controlwin,COLOR_PAIR(1));
-
     box(mainmenuwin,0,0);
     box(binswin,0,0);
     box(iwadwin,0,0);
@@ -57,7 +60,6 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     box(controlwin,0,0);
     keypad(mainmenuwin,true);
 
-    // Printing info:
     wattron(binswin,A_BOLD);
     wattron(iwadwin,A_BOLD);
     wattron(pwadwin,A_BOLD);
@@ -71,25 +73,16 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     wattroff(iwadwin,A_BOLD);
     wattroff(pwadwin,A_BOLD);
     wattroff(parawin,A_BOLD);
+
     mvwprintw(binswin,1,14,"%s",binarypath);
     mvwprintw(iwadwin,1,14,"%s",iwadpath);
     for(int i = 0; i < 6; i++)
       mvwprintw(pwadwin,i + 2,1,"%d: %s",i,pwads[i * 2 + 1]);
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 12; i++)
       mvwprintw(parawin,i + 2,1,"%d: %s",i,parameters[i]);
     mvwprintw(controlwin,1,1,"B - Select Binary | G - Select IWAD | P - Enter Parameters | M - Select PWADs");
     mvwprintw(controlwin,2,1,"RETURN - Play Doom! | I - Info Screen | Q - Quit SLDL");
 
-    // Printing error info in case of unfilled arguments.
-    if(goodcheck == 0) {
-      wattron(mainmenuwin,COLOR_PAIR(4));
-      wattron(mainmenuwin,A_BOLD);
-      mvwprintw(mainmenuwin,30,1,"ERROR: BINARY/IWAD IS NOT FILLED!");
-      wattron(mainmenuwin,COLOR_PAIR(1));
-      wattroff(mainmenuwin,A_BOLD);
-    }
-
-    // Refreshing screen:
     refresh();
     wrefresh(mainmenuwin);
     wrefresh(binswin);
@@ -99,7 +92,6 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     wrefresh(controlwin);
     wrefresh(stdscr);
 
-    // Input-output:
     userchoice = wgetch(mainmenuwin);
     switch(userchoice) {
     case 'b':
@@ -126,7 +118,7 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
       break;
     }
 
-    // In the case that the user selects 'Q' to quit, we exit the loop immediately.
+    // In the case that the user selects 'q' to quit, we exit the loop immediately.
     if(userchoice == 'q')
       break;
 
@@ -138,16 +130,16 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
       else
         goodcheck = 1;
     }
+
     if(goodcheck == 1)
       break;
   }
 
-  // Exporting arguments:
-  if(userchoice != 'q') {
+  // This routine writes all arguments into the proper char**.
+  if(userchoice == 10) {
     strcpy(args[0],binarypath);
     strcpy(args[2],iwadpath);
 
-    int pwadcount = 3;
     for(int i = 0; pwads[i][0] != '\0'; i++) {
       if(pwads[i + 1][0] == '\0')
         break;
@@ -159,12 +151,12 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
       strcpy(args[pwadcount + i],parameters[i]);
   }
 
-  // Freeing memory:
   free(binarypath);
   free(iwadpath);
-  for(int i = 0; i < 12; i++)
+  for(int i = 0; i < 12; i++) {
     free(pwads[i]);
-  for(int i = 0; i < 12; i++)
     free(parameters[i]);
+  }
+
   return;
 }
