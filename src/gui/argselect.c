@@ -6,9 +6,14 @@
 // This function allows the user to select an argument.
 void argselect(int Y, int X, char* filename, char* arg)
 {
+  char arguments[28][64];
+  char* buffer = malloc(sizeof(char) * 64);
+  FILE* file = fopen(filename,"r");
+  int linecount = 0;
+  int choice = 0;
+  int highlight = 0;
+  int quitcheck = 0;
 
-  // Window init:
-  init_pair(3,COLOR_WHITE,COLOR_BLACK);
   WINDOW * argwin = newwin(36, 92, Y, X);
   WINDOW * listwin = newwin(30, 90, Y + 1, X + 1);
   WINDOW * controlwin = newwin(3, 90, Y + 32, X + 1);
@@ -23,13 +28,6 @@ void argselect(int Y, int X, char* filename, char* arg)
   box(controlwin,0,0);
   keypad(argwin,true);
 
-  // File-related information gathering:
-  char arguments[28][64];
-  char* buffer = malloc(sizeof(char) * 64);
-  FILE* file = fopen(filename,"r");
-  int linecount = 0;
-
-  // We gather all entries from file, and then correct them.
   while(feof(file) != true) {
     fgets(buffer,64,file);
     strcpy(arguments[linecount], buffer);
@@ -37,26 +35,17 @@ void argselect(int Y, int X, char* filename, char* arg)
   }
   fclose(file);
 
-  // Printing information at bottom:
   wattron(controlwin,A_BOLD);
   mvwprintw(controlwin, 1, 1, "Up/Down/Return - Select Entry | Q - Return to Previous Screen");
-
-  // Refreshing:
   refresh();
   wrefresh(argwin);
   wrefresh(listwin);
   wrefresh(controlwin);
   wrefresh(stdscr);
-
-  // Input-output operators:
-  int choice = 0;
-  int highlight = 0;
-  int quitcheck = 0;
   wattron(listwin,A_BOLD);
 
   // This upper-loop will only be broken when the selected argument is valid.
   while(1) {
-    // This loop controls input-output related printing.
     while(quitcheck != 1) {
       for(int i = 0; i < linecount - 1; i = i + 2) {
         if(i == highlight)
@@ -90,11 +79,9 @@ void argselect(int Y, int X, char* filename, char* arg)
       }
     }
 
-    // We first check to see if 'q' was given.
     if(choice == 'q')
       break;
 
-    // Otherwise, we see if the argument is valid after correcting it:
     strcpy(arg,arguments[highlight + 1]);
     for(int i = 0; arg[i] != '\0'; i++) {
       if(arg[i] == '\n')
@@ -103,7 +90,6 @@ void argselect(int Y, int X, char* filename, char* arg)
     if(filevalidcheck(arg) == 0)
       break;
 
-    // In the case of invalidity, we set input variables to zero and print a warning message.
     quitcheck = 0;
     choice = 0;
     wattron(argwin,COLOR_PAIR(4));
@@ -113,17 +99,6 @@ void argselect(int Y, int X, char* filename, char* arg)
     arg[0] = '\0';
   }
 
-  // Then we delete the windows, free memory, and return:
-  wclear(argwin);
-  wclear(listwin);
-  wclear(controlwin);
-  wrefresh(argwin);
-  wrefresh(listwin);
-  wrefresh(controlwin);
-  delwin(argwin);
-  delwin(listwin);
-  delwin(controlwin);
   free(buffer);
-
   return;
 }

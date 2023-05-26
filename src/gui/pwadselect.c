@@ -5,7 +5,6 @@
 
 void pwadselect(int Y, int X, char** pwads)
 {
-
   int choice = 0;
   int highlight = 0;
   char* buffer = malloc(sizeof(char) * 64);
@@ -24,14 +23,11 @@ void pwadselect(int Y, int X, char** pwads)
     box(listwin,0,0);
     box(controlwin,0,0);
     keypad(mainwin,true);
-
     wattron(controlwin,A_BOLD);
     mvwprintw(controlwin,1,1,"Up/Down - Select PWAD | Return - Enter PWAD");
     mvwprintw(controlwin,2,1,"D - Delete PWAD | Q - Exit");
-
     wrefresh(mainwin);
     wrefresh(controlwin);
-
 
     for(int i = 0; i < 6; i++) {
       if(i == highlight)
@@ -39,7 +35,6 @@ void pwadselect(int Y, int X, char** pwads)
       mvwprintw(listwin,i+1,1,"%d: %s",i,pwads[i * 2 + 1]);
       wattroff(listwin,A_REVERSE);
     }
-
     wrefresh(listwin);
     wrefresh(stdscr);
 
@@ -54,6 +49,9 @@ void pwadselect(int Y, int X, char** pwads)
       if(highlight == 5)
         break;
       highlight++;
+    case 'd':
+      pwads[highlight * 2 + 1][0] = '\0';
+      break;
     case 'q':
       break;
     case 10:
