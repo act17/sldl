@@ -2,27 +2,30 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 #include "sldl.h"
 
 int main()
 {
+  int pid;
+  int status;
 
-  // Current setup for arguments:
-  char* args[32];
-  for(int i = 0; i < 32; i++)
-    args[i] = malloc(sizeof(char) * 64);
-  args[1] = "-iwad";
-  char* binarypath = malloc(sizeof(char) * 64);
+  char* binarypath;
+  char* iwadpara = "-iwad";
+  char* args[27];
 
-  // First check to see if 'bins.txt' or 'iwad.txt' has been created:
   if(fileinit() == 1)
     return 1;
 
   // This loop repeats until 'q' is pressed within mainmenu();
   int quitcheck = 0;
   while(1) {
+    binarypath = malloc(sizeof(char) * 64);
+    for(int i = 0; i < 27; i++)
+      args[i] = malloc(sizeof(char) * 64);
+    strcpy(args[1],iwadpara);
 
-    // Getting the screen size, checking for errors, returning in case of size being too small.
+    // This routine prepares Curses.
     int Y,X;
     initscr();
     start_color();
@@ -39,15 +42,19 @@ int main()
       printf("\nYours:	%d-Y	%d-X",Y,X);
       return 1;
     }
+    noecho();
 
     // Setting Y/X to being the position of the windows.
     Y = (Y - 36) / 2;
     X = (X - 92) / 2;
 
-    // Now we run the Main Menu Loop.
     mainmenu(Y,X,args,&quitcheck);
-    clear();
+
+    // After this point, it's expected that we exit Curses mode and reenter CLI. The following routine
+    // essentially "exits" Curses.
+    erase();
     refresh();
+    echo();
     endwin();
 
     // We break the loop early and don't run Doom if the user decides to quit SLDL in mainmenu();.
@@ -67,18 +74,23 @@ int main()
       }
     }
 
-    printf("\nPre-launch check:");
-    printf("\n\nPath to binary:\n%s",binarypath);
-    printf("\nList of args:");
-    for(int i = 0; args[i - 1] != NULL; i++)
-      printf("\narg[%d]:	%s",i,args[i]);
+    pid = fork();
+    if(pid == 0) {
+      printf("\nPre-launch check:");
+      printf("\n\nPath to binary:\n%s",binarypath);
+      printf("\nList of args:");
+      for(int i = 0; args[i] != NULL; i++)
+        printf("\narg[%d]:	%s",i,args[i]);
+      printf("\n");
+      execvp(binarypath, args);
+    }
 
-    execvp(binarypath, args);
+    waitpid(pid, &status, 0);
   }
 
-  // Freeing memory (duh)
   free(binarypath);
-  free(args[0]);
-  free(args[2]);
+  for(int i = 0; i < 27; i++)
+    free(args[i]);
+
   return 0;
 }
