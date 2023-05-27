@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Beta 0.5.0 | 2023/05/26
+Beta 0.5.1 | 2023/05/27
 
 
 # Description
@@ -42,6 +42,9 @@ Beta 0.5.0 | 2023/05/26
 
 
 # Changelog
+
+  Version Beta 0.5.1 (2023/05/27)
+  - Fixed major bug in ``main()`` where ``char* args[]`` would have corrupted strings. This issue was fixed by means of putting the calling of the ``char**``, memory allocation of the ``char**``, memory freeing of the ``char**`` and a new method to "reset" the values of each entry within the ``char**``, all within the ``while (1)`` loop only exited upon the user selecting to exit.
 
   Version Beta 0.5.0 (2023/05/26)
   - Added new feature - having SLDL automatically reopen after launching Doom.
