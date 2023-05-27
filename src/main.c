@@ -10,9 +10,8 @@ int main()
   int pid;
   int status;
 
-  char* binarypath;
   char* iwadpara = "-iwad";
-  char* args[27];
+  char* blank = "\0";
 
   if(fileinit() == 1)
     return 1;
@@ -20,9 +19,13 @@ int main()
   // This loop repeats until 'q' is pressed within mainmenu();
   int quitcheck = 0;
   while(1) {
-    binarypath = malloc(sizeof(char) * 64);
-    for(int i = 0; i < 27; i++)
+
+    char* args[28];
+    char* binarypath = malloc(sizeof(char) * 64);
+    for(int i = 0; i < 28; i++) {
       args[i] = malloc(sizeof(char) * 64);
+      strcpy(args[i],blank);
+    }
     strcpy(args[1],iwadpara);
 
     // This routine prepares Curses.
@@ -58,16 +61,19 @@ int main()
     endwin();
 
     // We break the loop early and don't run Doom if the user decides to quit SLDL in mainmenu();.
-    if(quitcheck == 1)
-      break;
+    if(quitcheck == 1){
+      free(binarypath);
+      for(int i = 0; i < 27; i++)
+        free(args[i]);
+      return 0;
+    }
 
     // When done, args[] should have all arguments filled in.
     // We then need to process the binary name from the path.
     strcpy(binarypath, args[0]);
     binarypartitioner(binarypath, args[0]);
 
-    // Then we find where args[] ends, and write "NULL" to the next argument.
-    for(int i = 0; i < 27; i++) {
+    for(int i = 0; i < 28; i++) {
       if(args[i][0] == '\0') {
         args[i] = NULL;
         break;
@@ -79,18 +85,18 @@ int main()
       printf("\nPre-launch check:");
       printf("\n\nPath to binary:\n%s",binarypath);
       printf("\nList of args:");
-      for(int i = 0; args[i] != NULL; i++)
+      for(int i = 0; i < 28; i++)
         printf("\narg[%d]:	%s",i,args[i]);
       printf("\n");
       execvp(binarypath, args);
     }
 
     waitpid(pid, &status, 0);
-  }
 
-  free(binarypath);
-  for(int i = 0; i < 27; i++)
-    free(args[i]);
+    free(binarypath);
+    for(int i = 0; i < 27; i++)
+      free(args[i]);
+  }
 
   return 0;
 }
