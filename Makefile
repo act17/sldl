@@ -1,5 +1,5 @@
 OBJS = src/main.c src/tools/binarypartitioner.c src/tools/fileinit.c src/tools/filevalidcheck.c src/gui/mainmenu.c src/gui/argselect.c src/gui/pwadselect.c src/gui/paraselect.c src/gui/infoscreen.c
-CFLAG = -Wall -Werror -Wpedantic -g
+CFLAG = -Wall -Wpedantic -Werror -g
 CC = gcc
 INCLUDE =
 LIBS = -lncurses
