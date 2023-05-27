@@ -10,24 +10,18 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
   char* filepara = "-file";
   char* pwads[12];
   char* parameters[12];
+  int pwadcount = 3;
   int userchoice = 0;
   int goodcheck = -1;
-  int pwadcount = 3;
 
   for(int i = 0; i < 12; i++) {
     pwads[i] = malloc(sizeof(char) * 64);
+    pwads[i][0] = '\0';
     parameters[i] = malloc(sizeof(char) * 64);
+    parameters[i][0] = '\0';
   }
   for(int i = 0; i < 12; i = i + 2)
     strcpy(pwads[i],filepara);
-
-  // For some unknown reason, args[3] and args[4]'s memory gets completely kaiboshed when mainmenu() closes,
-  // the memory is freed, and then is re-allocated when the function is re-called after launching.
-  // This solution corrects any potential issues where seemingly corrupted memory is treated as an argument, screwing up
-  // future launches.
-  // Dear God, I hope that this isn't a sign of something terrible.
-  args[3][0] = '\0';
-  args[4][0] = '\0';
 
   // Loop that controls when mainmenu() is to stop,
   // allows for recreation of appearance.
@@ -147,7 +141,7 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
       pwadcount++;
     }
 
-    for(int i = 0; parameters[i][0] != '\0'; i++)
+    for(int i = 0 ; parameters[i][0] != '\0'; i++)
       strcpy(args[pwadcount + i],parameters[i]);
   }
 
