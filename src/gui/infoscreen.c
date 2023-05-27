@@ -1,7 +1,7 @@
 #include <ncurses.h>
 
-#define VERSION_ID "Beta 0.5.0"
-#define VERSION_DATE "2023/05/26"
+#define VERSION_ID "Beta 0.5.1"
+#define VERSION_DATE "2023/05/27"
 
 void infoscreen(int Y, int X)
 {
