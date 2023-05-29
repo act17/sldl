@@ -5,6 +5,7 @@
 void paraselect(int Y, int X, char** parameters)
 {
   char* buffer = malloc(sizeof(char) * 64);
+  char* blank = "\0";
   int choice = 0;
   int highlight = 0;
 
@@ -23,7 +24,7 @@ void paraselect(int Y, int X, char** parameters)
   keypad(mainwin,true);
   wattron(controlwin,A_BOLD);
   mvwprintw(controlwin,1,1,"Up/Down - Select Parameter | Return - Enter Parameter");
-  mvwprintw(controlwin,2,1,"D - Delete Parameter | Q - Exit");
+  mvwprintw(controlwin,2,1,"D - Delete Parameter | C - Clear Parameters | Q - Exit");
   wrefresh(mainwin);
   wrefresh(controlwin);
 
@@ -31,7 +32,7 @@ void paraselect(int Y, int X, char** parameters)
     for(int i = 0; i < 12; i++) {
       if(i == highlight)
         wattron(listwin,A_REVERSE);
-      mvwprintw(listwin,i+1,1,"%d: %s",i,parameters[i]);
+      mvwprintw(listwin,i+1,1,"%d: %s                                              ",i,parameters[i]);
       wattroff(listwin,A_REVERSE);
     }
     wrefresh(listwin);
@@ -49,8 +50,11 @@ void paraselect(int Y, int X, char** parameters)
         break;
       highlight++;
     case 'd':
-      parameters[highlight][0] = '\0';
-      mvwprintw(listwin,highlight + 1,1,"                ");
+      strcpy(parameters[highlight],blank);
+      break;
+    case 'c':
+      for(int i = 0; i < 12; i++)
+        strcpy(parameters[i],blank);
       break;
     case 10:
       echo();
