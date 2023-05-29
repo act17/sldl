@@ -82,11 +82,13 @@ void argselect(int Y, int X, char* filename, char* arg)
     if(choice == 'q')
       break;
 
+    // This routine corrects the read argument.
     strcpy(arg,arguments[highlight + 1]);
     for(int i = 0; arg[i] != '\0'; i++) {
       if(arg[i] == '\n')
         arg[i] = '\0';
     }
+
     if(filevalidcheck(arg) == 0)
       break;
 
