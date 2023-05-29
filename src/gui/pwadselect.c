@@ -5,9 +5,10 @@
 
 void pwadselect(int Y, int X, char** pwads)
 {
+  char* buffer = malloc(sizeof(char) * 64);
+  char* blank = "\0";
   int choice = 0;
   int highlight = 0;
-  char* buffer = malloc(sizeof(char) * 64);
 
   while(choice != 'q') {
     WINDOW * mainwin = newwin(36,92,Y,X);
@@ -25,7 +26,7 @@ void pwadselect(int Y, int X, char** pwads)
     keypad(mainwin,true);
     wattron(controlwin,A_BOLD);
     mvwprintw(controlwin,1,1,"Up/Down - Select PWAD | Return - Enter PWAD");
-    mvwprintw(controlwin,2,1,"D - Delete PWAD | Q - Exit");
+    mvwprintw(controlwin,2,1,"D - Delete PWAD | C - Clear PWADs | Q - Exit");
     wrefresh(mainwin);
     wrefresh(controlwin);
 
@@ -49,14 +50,19 @@ void pwadselect(int Y, int X, char** pwads)
       if(highlight == 5)
         break;
       highlight++;
-    case 'd':
-      pwads[highlight * 2 + 1][0] = '\0';
       break;
-    case 'q':
+    case 'd':
+      strcpy(pwads[highlight * 2 + 1],blank);
+      break;
+    case 'c':
+      for(int i = 0; i < 6; i++)
+        strcpy(pwads[i * 2 + 1],blank);
       break;
     case 10:
       argselect(Y,X,"pwad.txt",buffer);
       strcpy(pwads[highlight * 2 + 1],buffer);
+      break;
+    case 'q':
       break;
     default:
       break;
