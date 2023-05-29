@@ -4,6 +4,8 @@
 int fileinit();
 int filevalidcheck(char* path);
 void binarypartitioner(char* binarypath, char* binaryname);
+void argumentsaver(char* binarypath, char* iwadpath, char** pwads, char** parameters);
+void argumentreader(char* binarypath, char* iwadpath, char** pwads, char** parameters);
 
 void mainmenu(int Y, int X, char** args, int* quitcheck);
 void argselect(int Y, int X, char* filename, char* arg);
