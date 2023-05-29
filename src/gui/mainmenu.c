@@ -23,6 +23,12 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
   for(int i = 0; i < 12; i = i + 2)
     strcpy(pwads[i],filepara);
 
+  FILE * file = fopen("prev.txt","r");
+  if(file) {
+    argumentreader(binarypath, iwadpath, pwads, parameters);
+    fclose(file);
+  }
+
   // Loop that controls when mainmenu() is to stop,
   // allows for recreation of appearance.
   while(1) {
@@ -74,8 +80,8 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
       mvwprintw(pwadwin,i + 2,1,"%d: %s",i,pwads[i * 2 + 1]);
     for(int i = 0; i < 12; i++)
       mvwprintw(parawin,i + 2,1,"%d: %s",i,parameters[i]);
-    mvwprintw(controlwin,1,1,"B - Select Binary | G - Select IWAD | P - Enter Parameters | M - Select PWADs");
-    mvwprintw(controlwin,2,1,"RETURN - Play Doom! | I - Info Screen | Q - Quit SLDL");
+    mvwprintw(controlwin,1,1,"B - Select Binary | I - Select IWAD | P - Select PWADs | A - Enter Parameters");
+    mvwprintw(controlwin,2,1,"RETURN - Play Doom! | SPACE - Info Screen | Q - Quit SLDL");
 
     refresh();
     wrefresh(mainmenuwin);
@@ -91,16 +97,16 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     case 'b':
       argselect(Y,X,"bins.txt",binarypath);
       break;
-    case 'g':
+    case 'i':
       argselect(Y,X,"iwad.txt",iwadpath);
       break;
-    case 'm':
+    case 'p':
       pwadselect(Y,X,pwads);
       break;
-    case 'p':
+    case 'a':
       paraselect(Y,X,parameters);
       break;
-    case 'i':
+    case 32:
       infoscreen(Y, X);
       break;
     case 'q':
@@ -143,6 +149,8 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
 
     for(int i = 0 ; parameters[i][0] != '\0'; i++)
       strcpy(args[pwadcount + i],parameters[i]);
+
+    argumentsaver(binarypath,iwadpath,pwads,parameters);
   }
 
   free(binarypath);
