@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Beta 0.5.1 | 2023/05/27
+Beta 0.6.0 | 2023/05/29
 
 
 # Description
@@ -42,6 +42,16 @@ Beta 0.5.1 | 2023/05/27
 
 
 # Changelog
+
+  Version Beta 0.6.0 (2023/05/29)
+  - Added new feature - saved arguments!
+    - This is done by way of two new functions, one that saves arguments - ``void argumentsaver(char* binarypath, char* iwadpath, char** pwads, char** parameters)`` - and one that reads these arguments - ``void argumentreader(char* binarypath, char* iwadpath, char** pwads, char** parameters)``.
+    - Arguments aren't saved from ``main()``'s ``args``, rather, they're saved from ``mainmenu()``'s pre-arguments. It's done this way beause all of this is handled in ``mainmenu()``. Upon telling ``mainmenu()`` to run Doom by striking RETURN, ``argumentsaver()`` is ran after the arguments are written to ``args``. Upon running ``mainmenu()``, however, a file called ``prev.txt`` is read, and if it exists, ``argumentreader()`` is ran.
+    - ``argumentsaver()`` operates by writing ``binarypath`` to ``prev.txt``, then a newline, then writing ``iwadpath`` to ``prev.txt`` followed by a newline. This is repeated for ``pwads`` and ``parameters``.
+    - ``argumentreader()`` operates by reading each line of ``prev.txt``, then altering the last character of each line to be ``\0``, and then writing it to ``binarypath``, ``iwadpath``, and all 12 elements of ``pwads`` then ``parameters``.
+    - ``argumentsaver()`` is in a new file, ``./src/tools/argumentsaver.c``. ``argumentreader()`` is also in a new file, ``./src/tools/argumentreader()``.
+    - ``Makefile`` and ``sldl.h`` have been updated to add the new files and headers for the new arguments respectively.
+  - Changed the keybindings in ``mainmenu()``. ``i`` now selects IWADs, ``p`` now selects PWADs, ``a`` selects parameters, and ``SPACE`` views the information screen.
 
   Version Beta 0.5.1 (2023/05/27)
   - Fixed major bug in ``main()`` where ``char* args[]`` would have corrupted strings. This issue was fixed by means of putting the calling of the ``char**``, memory allocation of the ``char**``, memory freeing of the ``char**`` and a new method to "reset" the values of each entry within the ``char**``, all within the ``while (1)`` loop only exited upon the user selecting to exit.
