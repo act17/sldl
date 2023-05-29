@@ -61,7 +61,7 @@ int main()
     endwin();
 
     // We break the loop early and don't run Doom if the user decides to quit SLDL in mainmenu();.
-    if(quitcheck == 1){
+    if(quitcheck == 1) {
       free(binarypath);
       for(int i = 0; i < 27; i++)
         free(args[i]);
@@ -72,6 +72,7 @@ int main()
     // We then need to process the binary name from the path.
     strcpy(binarypath, args[0]);
     binarypartitioner(binarypath, args[0]);
+
 
     for(int i = 0; i < 28; i++) {
       if(args[i][0] == '\0') {
@@ -85,7 +86,7 @@ int main()
       printf("\nPre-launch check:");
       printf("\n\nPath to binary:\n%s",binarypath);
       printf("\nList of args:");
-      for(int i = 0; i < 28; i++)
+      for(int i = 0; args[i] != NULL; i++)
         printf("\narg[%d]:	%s",i,args[i]);
       printf("\n");
       execvp(binarypath, args);
