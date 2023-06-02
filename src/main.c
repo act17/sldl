@@ -13,8 +13,8 @@ int main()
   char* iwadpara = "-iwad";
   char* blank = "\0";
 
-  if(fileinit() == 1)
-    return 1;
+  if(fileinit() > 0)
+    return 0;
 
   // This loop repeats until 'q' is pressed within mainmenu();
   int quitcheck = 0;
@@ -95,7 +95,7 @@ int main()
     waitpid(pid, &status, 0);
 
     free(binarypath);
-    for(int i = 0; i < 27; i++)
+    for(int i = 0; i < 28; i++)
       free(args[i]);
   }
 
