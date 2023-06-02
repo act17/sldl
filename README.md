@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Beta 0.6.0 | 2023/05/29
+Beta 0.7.0 | 2023/06/01
 
 
 # Description
@@ -42,6 +42,11 @@ Beta 0.6.0 | 2023/05/29
 
 
 # Changelog
+
+  Version Beta 0.7.0 (2023/06/01)
+  - Added new feature: Pages!
+    - ``argselect()``'s system for printing potential arguments. Not only has the buffer for potential arguments been increased from 64 to 256, but also there's a myroid of new variables. ``int page`` is used to determine the page that the user is on, which results in any argument past the 54th line to be properly printed on a new page. ``int verticalshift`` is now used in the place of ``(i / 2)`` in the calls of ``mvwprintw()`` in the ``for()`` loop. A whole bunch of other hackery has been implemented to make the system work, but it works - thank God.
+  - ``main.c``'s use of ``fileinit()``, and ``fileinit()`` itself has changed. All three vital ``.txt`` files are created in one go as opposed to one at a time.
 
   Version Beta 0.6.0 (2023/05/29)
   - Added new feature - saved arguments!
