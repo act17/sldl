@@ -4,9 +4,11 @@
 // This function checks to see if the files used by SLDL are valid.
 int fileinit()
 {
+  int returnvalue = 0;
   char defaultname[13] = "Display Name";
-  defaultname[12] = '\n';
   char defaultpath[13] = "/path/to/file";
+  defaultname[12] = '\n';
+
 
   FILE* bins = fopen("bins.txt","r");
   if(!bins) {
@@ -16,8 +18,9 @@ int fileinit()
     fwrite(defaultname,1,13,bins);
     fwrite(defaultpath,1,13,bins);
     fclose(bins);
-    return 1;
-  }
+    returnvalue++;
+  } else
+    fclose(bins);
 
   FILE* iwad = fopen("iwad.txt","r");
   if(!iwad) {
@@ -27,8 +30,9 @@ int fileinit()
     fwrite(defaultname,1,13,iwad);
     fwrite(defaultpath,1,13,iwad);
     fclose(iwad);
-    return 1;
-  }
+    returnvalue++;
+  } else
+    fclose(iwad);
 
   FILE* pwad = fopen("pwad.txt","r");
   if(!pwad) {
@@ -38,11 +42,9 @@ int fileinit()
     fwrite(defaultname,1,13,pwad);
     fwrite(defaultpath,1,13,pwad);
     fclose(pwad);
-    return 1;
-  }
+    returnvalue++;
+  } else
+    fclose(pwad);
 
-  fclose(bins);
-  fclose(iwad);
-  fclose(pwad);
-  return 0;
+  return returnvalue;
 }
