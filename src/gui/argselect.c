@@ -6,13 +6,18 @@
 // This function allows the user to select an argument.
 void argselect(int Y, int X, char* filename, char* arg)
 {
-  char arguments[28][64];
+  char* arguments[256];
+  for(int i = 0; i < 256; i++)
+    arguments[i] = malloc(sizeof(char) * 64);
   char* buffer = malloc(sizeof(char) * 64);
   FILE* file = fopen(filename,"r");
   int linecount = 0;
   int choice = 0;
+  int page = 0;
   int highlight = 0;
   int quitcheck = 0;
+  int selectedarg = 0;
+  int verticalshift = 1;
 
   WINDOW * argwin = newwin(36, 92, Y, X);
   WINDOW * listwin = newwin(30, 90, Y + 1, X + 1);
@@ -47,11 +52,15 @@ void argselect(int Y, int X, char* filename, char* arg)
   // This upper-loop will only be broken when the selected argument is valid.
   while(1) {
     while(quitcheck != 1) {
-      for(int i = 0; i < linecount - 1; i = i + 2) {
-        if(i == highlight)
+      verticalshift = 1;
+      for(int print = 56 * page; print <= 56 * (page + 1) - 2; print = print + 2) {
+        if(print == linecount - 1)
+          break;
+        if((verticalshift - 1) * 2 == highlight)
           wattron(listwin,A_REVERSE);
-        mvwprintw(listwin,1 + (i / 2), 2, "%s",arguments[i]);
+        mvwprintw(listwin,verticalshift,1,"%s",arguments[print]);
         wattroff(listwin,A_REVERSE);
+        verticalshift++;
       }
 
       wrefresh(listwin);
@@ -59,16 +68,33 @@ void argselect(int Y, int X, char* filename, char* arg)
 
       choice = wgetch(argwin);
       switch (choice) {
+
       case KEY_UP:
-        if(highlight == 0)
+        if(selectedarg == 0)
           break;
+        if(highlight == 56 * (page - 1) && page > 0) {
+          page--;
+          highlight = 56;
+          for(int i = 1; i < 29; i++)
+            mvwprintw(listwin,i,1,"                        ");
+        }
         highlight = highlight - 2;
+        selectedarg = selectedarg - 2;
         break;
+
       case KEY_DOWN:
-        if(highlight == linecount - 1)
+        if(selectedarg == linecount - 3)
           break;
+        if(highlight == 56 * (page + 1) - 2) {
+          page++;
+          highlight = -2;
+          for(int i = 1; i < 29; i++)
+            mvwprintw(listwin,i,1,"                        ");
+        }
         highlight = highlight + 2;
+        selectedarg = selectedarg + 2;
         break;
+
       case 'q':
         quitcheck = 1;
         break;
@@ -83,7 +109,7 @@ void argselect(int Y, int X, char* filename, char* arg)
       break;
 
     // This routine corrects the read argument.
-    strcpy(arg,arguments[highlight + 1]);
+    strcpy(arg,arguments[selectedarg + 1]);
     for(int i = 0; arg[i] != '\0'; i++) {
       if(arg[i] == '\n')
         arg[i] = '\0';
@@ -101,6 +127,8 @@ void argselect(int Y, int X, char* filename, char* arg)
     arg[0] = '\0';
   }
 
+  for(int i = 0; i < 256; i++)
+    free(arguments[i]);
   free(buffer);
   return;
 }
