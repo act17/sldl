@@ -3,8 +3,9 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Beta 0.7.0 | 2023/06/01
+Release 1.0.0 | 2023/06/02
 
+Lines of Code: 791
 
 # Description
 
@@ -14,6 +15,8 @@ Beta 0.7.0 | 2023/06/01
 # Compiling
 
   To compile SLDL, simply navigate to the directory in which the repository is in, and run the command ``make``. It will create a binary, ``sldl``, which is the program.
+
+  You will need the packages for NCurses - both running and development.
 
 
 # Usage
@@ -42,6 +45,17 @@ Beta 0.7.0 | 2023/06/01
 
 
 # Changelog
+
+  Release 1.0.0
+  - Fixed bug when transitioning from ``argselect()`` to its calling function (``mainmenu()`` or ``pwadselect()``).
+    - If 'q' is specified, it now assures that ``arg`` is set to ``\0``.
+  - Added semi-feature wherein if the IWAD or Binary isn't filled, their respective text will be printed in red to alert the user.
+  - Altered ``Makefile``:
+    - Target ``debug`` has been added. It compiles the program with ``-Werror`` and ``-g``. The regular ``sldl`` target compiles with ``-O2``. Target ``dclean`` has been also added.
+    - Formatting has been fiddled around with again.
+  - In ``argreader()``, there was a few lines that gave me a warning. There's now a system that prevents ``argreader()`` from writing ``NULL`` to arguments. There's also a line in ``argselect()`` that gives the same warning. I can't find a "fix" that doesn't completely break the darn thing.
+  - All files have been re-formatted with ``astyle``.
+  - Version/Date of Release have been moved to ``./src/sldl.h``. A cute little ASCII Cacodemon I made has been added to ``infoscreen()``.
 
   Version Beta 0.7.0 (2023/06/01)
   - Added new feature: Pages!
