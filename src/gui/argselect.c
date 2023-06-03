@@ -6,11 +6,12 @@
 // This function allows the user to select an argument.
 void argselect(int Y, int X, char* filename, char* arg)
 {
+  FILE* file = fopen(filename,"r");
   char* arguments[256];
   for(int i = 0; i < 256; i++)
     arguments[i] = malloc(sizeof(char) * 64);
   char* buffer = malloc(sizeof(char) * 64);
-  FILE* file = fopen(filename,"r");
+  char* blank = "\0";
   int linecount = 0;
   int choice = 0;
   int page = 0;
@@ -34,6 +35,7 @@ void argselect(int Y, int X, char* filename, char* arg)
   keypad(argwin,true);
 
   while(feof(file) != true) {
+    // This is the only line of the whole darn program that gives a warning.
     fgets(buffer,64,file);
     strcpy(arguments[linecount], buffer);
     linecount++;
@@ -67,7 +69,7 @@ void argselect(int Y, int X, char* filename, char* arg)
       wrefresh(stdscr);
 
       choice = wgetch(argwin);
-      switch (choice) {
+      switch(choice) {
 
       case KEY_UP:
         if(selectedarg == 0)
@@ -105,8 +107,10 @@ void argselect(int Y, int X, char* filename, char* arg)
       }
     }
 
-    if(choice == 'q')
+    if(choice == 'q') {
+      strcpy(arg,blank);
       break;
+    }
 
     // This routine corrects the read argument.
     strcpy(arg,arguments[selectedarg + 1]);
