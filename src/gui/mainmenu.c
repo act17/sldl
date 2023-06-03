@@ -65,8 +65,14 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     wattron(pwadwin,A_BOLD);
     wattron(parawin,A_BOLD);
     wattron(controlwin,A_BOLD);
+    if(goodcheck == 0) {
+      wattron(binswin,COLOR_PAIR(4));
+      wattron(iwadwin,COLOR_PAIR(4));
+    }
     mvwprintw(binswin,1,1,"Binary path:");
     mvwprintw(iwadwin,1,1,"IWAD path:");
+    wattron(binswin,COLOR_PAIR(1));
+    wattron(iwadwin,COLOR_PAIR(1));
     mvwprintw(pwadwin,1,1,"PWAD paths:");
     mvwprintw(parawin,1,1,"Extra Parameters:");
     wattroff(binswin,A_BOLD);
