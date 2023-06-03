@@ -46,7 +46,7 @@ Lines of Code: 791
 
 # Changelog
 
-  Release 1.0.0
+  Release 1.0.0 (2023/06/02)
   - Fixed bug when transitioning from ``argselect()`` to its calling function (``mainmenu()`` or ``pwadselect()``).
     - If 'q' is specified, it now assures that ``arg`` is set to ``\0``.
   - Added semi-feature wherein if the IWAD or Binary isn't filled, their respective text will be printed in red to alert the user.
