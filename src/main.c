@@ -73,7 +73,6 @@ int main()
     strcpy(binarypath, args[0]);
     binarypartitioner(binarypath, args[0]);
 
-
     for(int i = 0; i < 28; i++) {
       if(args[i][0] == '\0') {
         args[i] = NULL;
