@@ -7,15 +7,18 @@ void argumentreader(char* binarypath, char* iwadpath, char** pwads, char** param
   FILE* file = fopen("prev.txt", "r");
 
   char* buffer = malloc(sizeof(char) * 64);
-
-  fgets(buffer, 64, file);
+  char* blank = '\0';
+  
+  if(fgets(buffer, 64, file) ==  NULL)
+    strcpy(binarypath,blank);
   for(int i = 0; buffer[i] != '\0'; i++) {
     if(buffer[i] == '\n')
       buffer[i] = '\0';
   }
   strcpy(binarypath,buffer);
 
-  fgets(buffer, 64, file);
+  if(fgets(buffer, 64, file) ==  NULL)
+    strcpy(iwadpath,blank);
   for(int i = 0; buffer[i] != '\0'; i++) {
     if(buffer[i] == '\n')
       buffer[i] = '\0';
@@ -23,7 +26,8 @@ void argumentreader(char* binarypath, char* iwadpath, char** pwads, char** param
   strcpy(iwadpath,buffer);
 
   for(int i = 0; i < 12; i++) {
-    fgets(buffer, 64, file);
+    if(fgets(buffer, 64, file) ==  NULL)
+      strcpy(pwads[i],blank);
     for(int i = 0; buffer[i] != '\0'; i++) {
       if(buffer[i] == '\n')
         buffer[i] = '\0';
@@ -32,7 +36,8 @@ void argumentreader(char* binarypath, char* iwadpath, char** pwads, char** param
   }
 
   for(int i = 0; i < 12; i++) {
-    fgets(buffer, 64, file);
+    if(fgets(buffer, 64, file) ==  NULL)
+      strcpy(parameters[i],blank);
     for(int i = 0; buffer[i] != '\0'; i++) {
       if(buffer[i] == '\n')
         buffer[i] = '\0';
