@@ -12,6 +12,7 @@ void argselect(int Y, int X, char* filename, char* arg)
     arguments[i] = malloc(sizeof(char) * 64);
   char* buffer = malloc(sizeof(char) * 64);
   char* blank = "\0";
+  char* safeguard;
   int linecount = 0;
   int choice = 0;
   int page = 0;
@@ -34,11 +35,12 @@ void argselect(int Y, int X, char* filename, char* arg)
   box(controlwin,0,0);
   keypad(argwin,true);
 
-  while(feof(file) != true) {
-    // This is the only line of the whole darn program that gives a warning.
-    fgets(buffer,64,file);
+  while(linecount < 256) {
+    safeguard = fgets(buffer,64,file);
     strcpy(arguments[linecount], buffer);
     linecount++;
+    if(safeguard == NULL)
+      break;
   }
   fclose(file);
 
