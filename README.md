@@ -5,7 +5,6 @@ Current Version:
 
 Release 1.0.0 | 2023/06/02
 
-Lines of Code: 791
 
 # Description
 
@@ -45,6 +44,11 @@ Lines of Code: 791
 
 
 # Changelog
+
+  Release 1.0.1 (2023/06/04)
+  - Collapsed all files in ``./src/tools/`` into a single new file; ``./src/tools.c``. Comments have been added above each function to briefly describe their purpose.
+  - Re-configured the algorithm in ``argselect()`` for writing information from the specified file to the ``char**`` ``arguments``. Now uses a new ``char*``, ``safeguard``, to check if we've reached the end of the file. The ``while()`` loop, which now ensures that no more than 256 arguments are provided to prevent an overflow with the use of ``linecount``, breaks. This prevents a bug, and gets rid of an annoying warning.
+  - ``./Makefile`` has been altered to account for the new file, the removal of several files, and the apparent elimination of all potential warnings.
 
   Release 1.0.0 (2023/06/02)
   - Fixed bug when transitioning from ``argselect()`` to its calling function (``mainmenu()`` or ``pwadselect()``).
