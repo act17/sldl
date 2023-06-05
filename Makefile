@@ -1,6 +1,6 @@
-OBJS = src/main.c src/tools/binarypartitioner.c src/tools/fileinit.c src/tools/filevalidcheck.c src/tools/argumentsaver.c src/tools/argumentreader.c src/gui/mainmenu.c src/gui/argselect.c src/gui/pwadselect.c src/gui/paraselect.c src/gui/infoscreen.c
-CFLAG = -Wall -Wpedantic -O2
-DFLAG = -Wall -Wpedantic -Werror -g
+OBJS = src/main.c src/tools.c src/gui/mainmenu.c src/gui/argselect.c src/gui/pwadselect.c src/gui/paraselect.c src/gui/infoscreen.c
+CFLAG = -Wall -Wpedantic -Werror -O2
+DFLAG = -Wall -Wpedantic -g
 CC = gcc
 INCLUDE =
 LIBS = -lncurses
@@ -13,7 +13,7 @@ sldl:${OBJ}
 	${CC} ${CFLAG} ${INCLUDES} -o $@ ${OBJS} ${LIBS}
 
 debug:${OBJ}
-	${CC} ${CFLAG} ${INCLUDES} -o sldl-debug ${OBJS} ${LIBS}
+	${CC} ${DFLAG} ${INCLUDES} -o sldl-debug ${OBJS} ${LIBS}
 
 format:${OBJ}
 	${FM} ${OBJS} ${FFLAG} 
