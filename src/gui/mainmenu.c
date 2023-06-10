@@ -7,7 +7,6 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
 {
   char* binarypath = malloc(sizeof(char) * 64);
   char* iwadpath = malloc(sizeof(char) * 64);
-  char* filepara = "-file";
   char* pwads[12];
   char* parameters[12];
   int pwadcount = 3;
@@ -20,8 +19,9 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     parameters[i] = malloc(sizeof(char) * 64);
     parameters[i][0] = '\0';
   }
-  for(int i = 0; i < 12; i = i + 2)
-    strcpy(pwads[i],filepara);
+  strcpy(pwads[0],"-file");
+  for(int i = 2; i < 12; i = i + 2)
+    strcpy(pwads[i],"-merge");
 
   FILE * file = fopen("prev.txt","r");
   if(file) {
