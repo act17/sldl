@@ -10,9 +10,6 @@ int main()
   int pid;
   int status;
 
-  char* iwadpara = "-iwad";
-  char* blank = "\0";
-
   if(fileinit() > 0)
     return 0;
 
@@ -24,9 +21,9 @@ int main()
     char* binarypath = malloc(sizeof(char) * 64);
     for(int i = 0; i < 28; i++) {
       args[i] = malloc(sizeof(char) * 64);
-      strcpy(args[i],blank);
+      strcpy(args[i],"\0");
     }
-    strcpy(args[1],iwadpara);
+    strcpy(args[1],"-iwad");
 
     // This routine prepares Curses.
     int Y,X;
