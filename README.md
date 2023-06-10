@@ -3,7 +3,9 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Release 1.0.0 | 2023/06/02
+Release 1.1.0 | 2023/06/10
+
+Lines of code: 829
 
 
 # Description
@@ -44,6 +46,14 @@ Release 1.0.0 | 2023/06/02
 
 
 # Changelog
+
+  Release 1.1.0 (2023/06/10)
+  - Added new feature: argument collapsing.
+    - Before this version, if you entered information in the 0th PWAD slot, the 1st PWAD slot, and the 4th PWAD slot, only the 0th and 1st would be loaded. Now, PWADs and parameters are collapsed.
+    - This is done by the way of a new function in ``tools.c``: ``void argumentcollapser(char** args, int size)``. It's included at the end of ``pwadselect()`` and ``paraselect()``. Headers in ``sldl.h`` have been added.
+  - Altered ``mainmenu()``. Removed ``char* filepara``, as I realized it was unnessicary. Also switched up how ``char* pwads[12]`` are initialized: ``pwads[0]`` is set to ``-file``, and every subsequent second entry (2,4,6...) is set to ``-merge``. This is to permit the actual loading of other files.
+  - ``main()``, ``pwadselect()``, and ``paraselect()`` have all had unnessicary ``char*``s used to set certain entries in ``char**``s to certain values (E.g. ``-iwad`` in ``main()``, or the usage of ``char* blank`` wholesale). They now simply copy the raw string as opposed to what essentially amounts to a glorified pointer.
+  - Fixed bug in ``paraselect()`` where a missing ``break`` caused accidental deletion of parameters.
 
   Release 1.0.1 (2023/06/04)
   - Collapsed all files in ``./src/tools/`` into a single new file; ``./src/tools.c``. Comments have been added above each function to briefly describe their purpose.
