@@ -2,6 +2,34 @@
 #include <stdlib.h>
 #include <string.h>
 
+// This function ensures that all non-"\0" entries in args are next to eachother
+// E.g. args[0] = "A" args[1] = "\0" args[2] = "B" -> args[1] = "B" args[2] = "\0"
+void argumentcollapser(char** args, int size)
+{
+
+  char* buffer = malloc(sizeof(char) * 64);
+  char* argstorage[size];
+  int currentarg = 0;
+
+  for(int i = 0; i < size; i++) {
+    argstorage[i] = malloc(sizeof(char) * 64);
+    if(args[i][0] != '\0') {
+      strcpy(argstorage[currentarg],args[i]);
+      currentarg++;
+    }
+  }
+
+  for(int i = currentarg; i < size; i++)
+    strcpy(argstorage[i],"\0");
+
+  for(int i = 0; i < size; i++) {
+    strcpy(args[i],argstorage[i]);
+    free(argstorage[i]);
+  }
+  free(buffer);
+  return;
+}
+
 // This function takes arguments specified in prev.txt, and writes to the passed char*s
 // the contents of prev.txt.
 void argumentreader(char* binarypath, char* iwadpath, char** pwads, char** parameters)
@@ -10,10 +38,10 @@ void argumentreader(char* binarypath, char* iwadpath, char** pwads, char** param
 
   if(!file)
     return;
-  
+
   char* buffer = malloc(sizeof(char) * 64);
   char* blank = '\0';
-  
+
   if(fgets(buffer, 64, file) ==  NULL)
     strcpy(binarypath,blank);
   for(int i = 0; buffer[i] != '\0'; i++) {
