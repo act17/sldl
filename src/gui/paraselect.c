@@ -1,11 +1,11 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../sldl.h"
 
 void paraselect(int Y, int X, char** parameters)
 {
   char* buffer = malloc(sizeof(char) * 64);
-  char* blank = "\0";
   int choice = 0;
   int highlight = 0;
 
@@ -49,12 +49,13 @@ void paraselect(int Y, int X, char** parameters)
       if(highlight == 12)
         break;
       highlight++;
+      break;
     case 'd':
-      strcpy(parameters[highlight],blank);
+      strcpy(parameters[highlight],"\0");
       break;
     case 'c':
       for(int i = 0; i < 12; i++)
-        strcpy(parameters[i],blank);
+        strcpy(parameters[i],"\0");
       break;
     case 10:
       echo();
@@ -68,6 +69,9 @@ void paraselect(int Y, int X, char** parameters)
       break;
     }
   }
+
+
+  argumentcollapser(parameters,12);
 
   free(buffer);
   return;
