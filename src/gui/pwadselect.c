@@ -6,7 +6,6 @@
 void pwadselect(int Y, int X, char** pwads)
 {
   char* buffer = malloc(sizeof(char) * 64);
-  char* blank = "\0";
   int choice = 0;
   int highlight = 0;
 
@@ -52,11 +51,11 @@ void pwadselect(int Y, int X, char** pwads)
       highlight++;
       break;
     case 'd':
-      strcpy(pwads[highlight * 2 + 1],blank);
+      strcpy(pwads[highlight * 2 + 1],"\0");
       break;
     case 'c':
       for(int i = 0; i < 6; i++)
-        strcpy(pwads[i * 2 + 1],blank);
+        strcpy(pwads[i * 2 + 1],"\0");
       break;
     case 10:
       argselect(Y,X,"pwad.txt",buffer);
@@ -67,6 +66,19 @@ void pwadselect(int Y, int X, char** pwads)
     default:
       break;
     }
+  }
+
+  char* pwadbuffer[6];
+  for(int i = 0; i < 6; i++) {
+    pwadbuffer[i] = malloc(sizeof(char) * 64);
+    strcpy(pwadbuffer[i],pwads[i * 2 + 1]);
+  }
+
+  argumentcollapser(pwadbuffer,6);
+
+  for(int i = 0; i < 6; i++) {
+    strcpy(pwads[i * 2 + 1],pwadbuffer[i]);
+    free(pwadbuffer[i]);
   }
 
   free(buffer);
