@@ -3,9 +3,8 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Release 1.1.0 | 2023/06/10
+Release 1.2.0 | 2023/07/16
 
-Lines of code: 829
 
 
 # Description
@@ -47,6 +46,12 @@ Lines of code: 829
 
 # Changelog
 
+  Release 1.2.0 (2023/07/16)
+  - Modified ``paraselect()``.
+    - Fixed issues with string handling. Null and duplicate entry prevention measures have been implemented to ensure whitespaces in particular don't completely kaibosh the parameter selection process.
+    - Added new features - shifting parameters.
+      - Pressing 'w' will shift a parameter up. Pressing 's' will shift a parameter down.
+      
   Release 1.1.0 (2023/06/10)
   - Added new feature: argument collapsing.
     - Before this version, if you entered information in the 0th PWAD slot, the 1st PWAD slot, and the 4th PWAD slot, only the 0th and 1st would be loaded. Now, PWADs and parameters are collapsed.
