@@ -14,7 +14,7 @@ void pwadselect(int Y, int X, char** pwads);
 void paraselect(int Y, int X, char** parameters);
 void infoscreen(int Y, int X);
 
-#define VERSION_ID "Release 1.1.0"
-#define VERSION_DATE "2023/06/10"
+#define VERSION_ID "Release 1.2.0"
+#define VERSION_DATE "2023/07/16"
 
 #endif
