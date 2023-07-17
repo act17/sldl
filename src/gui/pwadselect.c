@@ -32,6 +32,7 @@ void pwadselect(int Y, int X, char** pwads)
     for(int i = 0; i < 6; i++) {
       if(i == highlight)
         wattron(listwin,A_REVERSE);
+      mvwprintw(listwin,i+1,3,"                                                        ");
       mvwprintw(listwin,i+1,1,"%d: %s",i,pwads[i * 2 + 1]);
       wattroff(listwin,A_REVERSE);
     }
