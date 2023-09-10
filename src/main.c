@@ -10,7 +10,11 @@ int main()
   int pid;
   int status;
 
-  if(fileinit() > 0)
+  // Grabbing the base directory (~/.config/sldl/);
+  char* basedir = malloc(sizeof(char) * 64);
+  homedirsetup(basedir);
+
+  if(fileinit(basedir) > 0)
     return 0;
 
   // This loop repeats until 'q' is pressed within mainmenu();
@@ -48,7 +52,7 @@ int main()
     Y = (Y - 36) / 2;
     X = (X - 92) / 2;
 
-    mainmenu(Y,X,args,&quitcheck);
+    mainmenu(Y,X,args,&quitcheck,basedir);
 
     // After this point, it's expected that we exit Curses mode and reenter CLI. The following routine
     // essentially "exits" Curses.
