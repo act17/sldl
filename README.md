@@ -3,7 +3,7 @@ A Curses-based Doom Launcher operating under the Suckless philosophy.
 
 Current Version:
 
-Release 1.2.0 | 2023/07/16
+Release 1.3.0 | 2023/09/09
 
 
 
@@ -23,11 +23,11 @@ Release 1.2.0 | 2023/07/16
 
   Currently, the usage of SLDL is as follows:
 
-  1)  Compile SLDL.
-  2)  Make three files in the directory that the binary ``sldl`` is within; ``bins.txt``, ``iwad.txt``, and ``pwad.txt``. They will be created in the case that they do not exist.
-  3)  Enter the names and paths to the binaries/IWADs/PWADs in ``bins.txt``, ``iwad.txt``, and ``pwad.txt``. Refer to below for examples.
+  - Step 0. Compile SLDL (Or run a premade binary.)
+  - Step 1. Run SLDL.
+  - Step 2. Edit the files used to extrapolate binaries, located within ``~/.config/sldl/``.
 
-  *File: bins.txt*
+  *File: ~/.config/sldl/bins.txt*
   ```
   Crispy Doom
   /home/user/games/doom/crispy-doom
@@ -35,16 +35,23 @@ Release 1.2.0 | 2023/07/16
   /home/user/games/gzdoom/gzdoom
   ```
 
-  *File: iwad.txt*
+  *File: ~/.config/sldl/iwad.txt*
   ```
   Doom II: Hell on Earth
   /home/user/games/doom/doom2.wad
   ```
 
-  4) Run ``sldl`` and follow onscreen instructions to play Doom.
+  - Step 3. Run ``sldl`` and follow onscreen instructions to play Doom.
 
 
 # Changelog
+
+  Release 1.3.0 (2023/09/09)
+  - Added new feature: one home to the configuration files.
+    - Config files are stored in ``~/.config/sldl``.
+    - Added a new function: ``void homedirsetup(char* dir)``. It will take the home directory, concate it with ``/.config/sldl``, and then create that directory if not yet created. It writes this full directory to ``char* dir``, which is used as a reference to where different information files are stored.
+  - Altered ``sldl.h`` to reflect the changes with this new system. Changes are also seen in ``main.c``, ``mainmenu.c``, ``argselect.c``, and ``pwadselect.c``.
+  - Added a safety check in ``paraselect.c`` to prevent buffer overflows.
 
   Release 1.2.0 (2023/07/16)
   - Modified ``paraselect()``.
