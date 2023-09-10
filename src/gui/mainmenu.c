@@ -3,7 +3,7 @@
 #include <string.h>
 #include "../sldl.h"
 
-void mainmenu(int Y, int X, char** args, int* quitcheck)
+void mainmenu(int Y, int X, char** args, int* quitcheck, char* basedir)
 {
   char* binarypath = malloc(sizeof(char) * 64);
   char* iwadpath = malloc(sizeof(char) * 64);
@@ -23,11 +23,17 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
   for(int i = 2; i < 12; i = i + 2)
     strcpy(pwads[i],"-merge");
 
-  FILE * file = fopen("prev.txt","r");
-  if(file) {
-    argumentreader(binarypath, iwadpath, pwads, parameters);
-    fclose(file);
-  }
+  char* binsname = malloc(sizeof(char) * 64);
+  char* iwadname = malloc(sizeof(char) * 64);
+  char* pwadname = malloc(sizeof(char) * 64);
+  strcpy(binsname,basedir);
+  strcpy(iwadname,basedir);
+  strcpy(pwadname,basedir);
+  strcat(binsname,"/bins.txt");
+  strcat(iwadname,"/iwad.txt");
+  strcat(pwadname,"/pwad.txt");
+
+  argumentreader(binarypath, iwadpath, pwads, parameters, basedir);
 
   // Loop that controls when mainmenu() is to stop,
   // allows for recreation of appearance.
@@ -101,13 +107,13 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     userchoice = wgetch(mainmenuwin);
     switch(userchoice) {
     case 'b':
-      argselect(Y,X,"bins.txt",binarypath);
+      argselect(Y,X,binsname,binarypath);
       break;
     case 'i':
-      argselect(Y,X,"iwad.txt",iwadpath);
+      argselect(Y,X,iwadname,iwadpath);
       break;
     case 'p':
-      pwadselect(Y,X,pwads);
+      pwadselect(Y,X,pwads,pwadname);
       break;
     case 'a':
       paraselect(Y,X,parameters);
@@ -156,7 +162,7 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     for(int i = 0 ; parameters[i][0] != '\0'; i++)
       strcpy(args[pwadcount + i],parameters[i]);
 
-    argumentsaver(binarypath,iwadpath,pwads,parameters);
+    argumentsaver(binarypath,iwadpath,pwads,parameters,basedir);
   }
 
   free(binarypath);
@@ -165,6 +171,9 @@ void mainmenu(int Y, int X, char** args, int* quitcheck)
     free(pwads[i]);
     free(parameters[i]);
   }
+  free(binsname);
+  free(iwadname);
+  free(pwadname);
 
   return;
 }
