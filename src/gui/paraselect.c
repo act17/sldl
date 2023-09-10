@@ -75,7 +75,7 @@ void paraselect(int Y, int X, char** parameters)
       break;
     case 10:
       echo();
-      mvwscanw(listwin,highlight+1,4,"%s",buffer);
+      mvwscanw(listwin,highlight+1,4,"%64s",buffer);
       if(buffer[0] != ' ')
         strcpy(parameters[highlight],buffer);
       else
@@ -88,7 +88,6 @@ void paraselect(int Y, int X, char** parameters)
       break;
     }
   }
-
 
   argumentcollapser(parameters,12);
 
