@@ -3,7 +3,7 @@
 #include <string.h>
 #include "../sldl.h"
 
-void pwadselect(int Y, int X, char** pwads)
+void pwadselect(int Y, int X, char** pwads, char* pwadname)
 {
   char* buffer = malloc(sizeof(char) * 64);
   int choice = 0;
@@ -59,7 +59,7 @@ void pwadselect(int Y, int X, char** pwads)
         strcpy(pwads[i * 2 + 1],"\0");
       break;
     case 10:
-      argselect(Y,X,"pwad.txt",buffer);
+      argselect(Y,X,pwadname,buffer);
       strcpy(pwads[highlight * 2 + 1],buffer);
       break;
     case 'q':
