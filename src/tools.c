@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 // This function ensures that all non-"\0" entries in args are next to eachother
 // E.g. args[0] = "A" args[1] = "\0" args[2] = "B" -> args[1] = "B" args[2] = "\0"
@@ -32,9 +33,13 @@ void argumentcollapser(char** args, int size)
 
 // This function takes arguments specified in prev.txt, and writes to the passed char*s
 // the contents of prev.txt.
-void argumentreader(char* binarypath, char* iwadpath, char** pwads, char** parameters)
+void argumentreader(char* binarypath, char* iwadpath, char** pwads, char** parameters, char* basedir)
 {
-  FILE* file = fopen("prev.txt", "r");
+  char* prevname = malloc(sizeof(char) * 64);
+  strcpy(prevname,basedir);
+  strcat(prevname,"/prev.txt");
+
+  FILE* file = fopen(prevname, "r");
 
   if(!file)
     return;
@@ -79,14 +84,19 @@ void argumentreader(char* binarypath, char* iwadpath, char** pwads, char** param
   }
 
   free(buffer);
+  free(prevname);
   fclose(file);
   return;
 }
 
 // This function takes the passed char*s and writes them to prev.txt.
-void argumentsaver(char* binarypath, char* iwadpath, char** pwads, char** parameters)
-{
-  FILE* file = fopen("prev.txt", "w+");
+void argumentsaver(char* binarypath, char* iwadpath, char** pwads, char** parameters, char* basedir)
+{ 
+  char* prevname = malloc(sizeof(char) * 64);
+  strcpy(prevname,basedir);
+  strcat(prevname,"/prev.txt");
+  
+  FILE* file = fopen(prevname, "w+");
   char* buffer = "\n";
 
   fwrite(binarypath,1,strlen(binarypath),file);
@@ -103,6 +113,7 @@ void argumentsaver(char* binarypath, char* iwadpath, char** pwads, char** parame
     fwrite(buffer,1,1,file);
   }
 
+  free(prevname);
   fclose(file);
   return;
 }
@@ -123,17 +134,29 @@ void binarypartitioner(char* binarypath, char* binaryname)
 }
 
 // This function checks to see if the files used by SLDL are valid.
-int fileinit()
+int fileinit(char* basedir)
 {
   int returnvalue = 0;
   char defaultname[13] = "Display Name";
   char defaultpath[13] = "/path/to/file";
   defaultname[12] = '\n';
+  
+  // Setting up the strings used to refer to each file in basedir
+  char* binsname = malloc(sizeof(char) * 64);
+  char* iwadname = malloc(sizeof(char) * 64);
+  char* pwadname = malloc(sizeof(char) * 64);
+  
+  strcpy(binsname,basedir);
+  strcpy(iwadname,basedir);
+  strcpy(pwadname,basedir);
 
+  strcat(binsname,"/bins.txt");
+  strcat(iwadname,"/iwad.txt");
+  strcat(pwadname,"/pwad.txt");
 
-  FILE* bins = fopen("bins.txt","r");
+  FILE* bins = fopen(binsname,"r");
   if(!bins) {
-    FILE* bins = fopen("bins.txt","w+");
+    FILE* bins = fopen(binsname,"w+");
     printf("\nError!\n");
     printf("bins.txt does not exist, and has been created in your directory with an example provided.\n");
     fwrite(defaultname,1,13,bins);
@@ -143,9 +166,9 @@ int fileinit()
   } else
     fclose(bins);
 
-  FILE* iwad = fopen("iwad.txt","r");
+  FILE* iwad = fopen(iwadname,"r");
   if(!iwad) {
-    FILE* iwad = fopen("iwad.txt","w+");
+    FILE* iwad = fopen(iwadname,"w+");
     printf("\nError!\n");
     printf("iwad.txt does not exist, and has been created in your directory with an example provided.\n");
     fwrite(defaultname,1,13,iwad);
@@ -155,9 +178,9 @@ int fileinit()
   } else
     fclose(iwad);
 
-  FILE* pwad = fopen("pwad.txt","r");
+  FILE* pwad = fopen(pwadname,"r");
   if(!pwad) {
-    FILE* pwad = fopen("pwad.txt","w+");
+    FILE* pwad = fopen(pwadname,"w+");
     printf("\nError!\n");
     printf("pwad.txt does not exist, and has been created in your directory with an example provided.\n");
     fwrite(defaultname,1,13,pwad);
@@ -166,6 +189,13 @@ int fileinit()
     returnvalue++;
   } else
     fclose(pwad);
+
+  free(binsname);
+  free(iwadname);
+  free(pwadname);
+
+  if(returnvalue > 0)
+    printf("\n!BASE DIRECTORY!:\n%s",basedir);
 
   return returnvalue;
 }
@@ -180,4 +210,35 @@ int filevalidcheck(char* path)
 
   fclose(file);
   return 0;
+}
+
+// This function initializes the home directory stuff.
+void homedirsetup(char* dir){
+  const char* homedir = getenv("HOME");
+  const char* confdir = "/.config/sldl/";
+  
+  // Creating our full directory:
+  char* fulldir = malloc(sizeof(char) * 64);
+  strcpy(fulldir, homedir);
+  
+  int homelength = strlen(homedir);
+  int conflength = strlen(confdir);
+
+  for(int i = 0; i < conflength; i++){
+    fulldir[homelength + i] = confdir[i];    
+  }
+  fulldir[homelength + conflength] = '\0';
+
+  // We check to see if the directory exists:
+  struct stat st;
+  
+  // If it doesn't exist, we make it.
+  if (stat(fulldir, &st) == -1)
+    mkdir(fulldir, 0700);
+  
+  // Then we copy fulldir to dir, and we can then leave.  
+  strcpy(dir, fulldir);
+  
+  free(fulldir);
+  return;
 }
